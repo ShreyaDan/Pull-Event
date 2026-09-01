@@ -4037,7 +4037,7 @@ function playEndAnimation(won){
    EXCEL INTEGRATION
    ========================================================= */
 
-const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbwVSjTOkSzWo1xWSMfilk3lc1qw0tjaVMDmPvlMMQPkb4Z-mpCjqDCb6sK8-wZpHbqsjQ/exec";
+const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzSjM8PpEMlAGMHoVm5FrsprkhSqwzTU0BsG7JQjT1ciyKytZ-HuEvh5q0XjpmTFqPRcA/exec";
 
 function generateSerialNumber(){
   return `QZ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
@@ -4086,44 +4086,41 @@ function formatResponsesForExcel(){
 
 function sendResponsesToExcel(){
   console.log("🚀 SENDING RESPONSES TO GOOGLE SHEETS");
-  
+
   if(!selectedRole){
     console.error("❌ ERROR: No role selected!");
     return;
   }
-  
+
   if(responses.length === 0){
     console.error("❌ ERROR: No responses collected!");
     return;
   }
-  
+
   const data = formatResponsesForExcel();
-  
+
   console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
   console.log("📤 Sending payload:", JSON.stringify(data, null, 2));
-  
-  // Send to Google Sheets
+
+  /*
+    Google Apps Script web apps can reject a browser CORS preflight
+    when Content-Type is application/json. Sending the same JSON as
+    text/plain avoids the preflight while doPost() can still parse
+    e.postData.contents with JSON.parse().
+  */
   fetch(GOOGLE_SHEETS_WEBHOOK, {
     method: "POST",
+    mode: "no-cors",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain;charset=utf-8"
     },
     body: JSON.stringify(data)
   })
-  .then(response => {
-    console.log("✅ Response received! Status:", response.status);
-    if(!response.ok){
-      console.error("❌ HTTP Error:", response.status, response.statusText);
-      return response.text().then(text => {
-        console.error("Response body:", text);
-      });
-    }
-    console.log("✅✅✅ DATA SENT SUCCESSFULLY TO GOOGLE SHEETS!");
-    return response.json().catch(() => ({}));
+  .then(() => {
+    console.log("✅ Submission request sent to Google Sheets.");
   })
   .catch(error => {
-    console.error("❌ FETCH ERROR:", error.message);
-    console.error("Full error:", error);
+    console.error("❌ GOOGLE SHEETS SUBMISSION FAILED:", error);
   });
 }
 
