@@ -2792,6 +2792,8 @@ let endAnimationTimer = 0;
 
 let gameOverByLives = false;
 
+let responsesSubmitted = false;
+
 
 /* =========================================================
    DOM
@@ -3965,6 +3967,8 @@ function startQuiz(){
   score = 0;
   responses = [];
 
+  responsesSubmitted = false;
+
   livesLeft = 3;
 
   gameOverByLives = false;
@@ -4087,6 +4091,11 @@ function formatResponsesForExcel(){
 function sendResponsesToExcel(){
   console.log("🚀 SENDING RESPONSES TO GOOGLE SHEETS");
 
+  if(responsesSubmitted){
+    console.log("ℹ️ Responses already submitted. Skipping duplicate submission.");
+    return;
+  }
+
   if(!selectedRole){
     console.error("❌ ERROR: No role selected!");
     return;
@@ -4098,32 +4107,51 @@ function sendResponsesToExcel(){
   }
 
   const data = formatResponsesForExcel();
+  const jsonData = JSON.stringify(data);
 
   console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
-  console.log("📤 Sending payload:", JSON.stringify(data, null, 2));
+  console.log("📤 Sending payload:", jsonData);
 
   /*
-    IMPORTANT:
-    The Apps Script doPost() currently reads e.parameter.data.
-    Therefore the browser must send the JSON as a URL-encoded form field
-    named exactly "data". This also avoids a CORS preflight.
+    Google Apps Script reads e.parameter.data.
+    A normal HTML form POST sends exactly that field and avoids
+    cross-origin fetch/CORS preflight issues.
   */
-  const body = "data=" + encodeURIComponent(JSON.stringify(data));
 
-  fetch(GOOGLE_SHEETS_WEBHOOK, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-    },
-    body
-  })
-  .then(() => {
-    console.log("✅ Submission request sent to Google Sheets.");
-  })
-  .catch(error => {
+  const iframeName = "googleSheetsSubmitFrame_" + Date.now();
+
+  const iframe = document.createElement("iframe");
+  iframe.name = iframeName;
+  iframe.style.display = "none";
+  document.body.appendChild(iframe);
+
+  const form = document.createElement("form");
+  form.method = "POST";
+  form.action = GOOGLE_SHEETS_WEBHOOK;
+  form.target = iframeName;
+  form.style.display = "none";
+
+  const input = document.createElement("input");
+  input.type = "hidden";
+  input.name = "data";
+  input.value = jsonData;
+
+  form.appendChild(input);
+  document.body.appendChild(form);
+
+  try{
+    responsesSubmitted = true;
+    form.submit();
+    console.log("✅ Submission sent to Google Apps Script.");
+  }catch(error){
+    responsesSubmitted = false;
     console.error("❌ GOOGLE SHEETS SUBMISSION FAILED:", error);
-  });
+  }
+
+  setTimeout(() => {
+    form.remove();
+    iframe.remove();
+  }, 10000);
 }
 
 /* =========================================================
@@ -4417,6 +4445,9 @@ restartBtn.addEventListener(
     platformOffset = 0;
     score = 0;
     responses = [];
+
+    responsesSubmitted = false;
+
     livesLeft = 3;
     gameOverByLives = false;
     selectedRole = "";
