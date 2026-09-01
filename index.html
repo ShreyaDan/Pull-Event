@@ -2790,6 +2790,9 @@ let winningFlagTimer = 0;
 
 let endAnimationTimer = 0;
 
+// Prevent duplicate Google Sheets submissions for the same quiz attempt.
+let submissionSent = false;
+
 let gameOverByLives = false;
 
 
@@ -3607,14 +3610,10 @@ function chooseAnswer(answerLetter){
 
       // Loss always uses the Heartbreak animation.
       playEndAnimation(false);
-      
-      // Send responses to Excel after animation starts (1.5 second delay)
-      console.log("⏱️ Starting timer to send responses in 1.5 seconds... (from Game Over)");
-      setTimeout(() => {
-        console.log("⏰ Timer fired! Calling sendResponsesToExcel() from Game Over");
-        sendResponsesToExcel();
-      }, 1500);
-      
+
+      // Submit immediately. The result animation continues independently.
+      sendResponsesToExcel();
+
       return;
     }
 
@@ -3964,6 +3963,7 @@ function startQuiz(){
 
   score = 0;
   responses = [];
+  submissionSent = false;
 
   livesLeft = 3;
 
@@ -4087,6 +4087,11 @@ function formatResponsesForExcel(){
 function sendResponsesToExcel(){
   console.log("🚀 SENDING RESPONSES TO GOOGLE SHEETS");
 
+  if(submissionSent){
+    console.log("ℹ️ Submission already sent for this quiz attempt.");
+    return;
+  }
+
   if(!selectedRole){
     console.error("❌ ERROR: No role selected!");
     return;
@@ -4098,26 +4103,52 @@ function sendResponsesToExcel(){
   }
 
   const data = formatResponsesForExcel();
+  const payload = JSON.stringify(data);
 
-  console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
-  console.log("📤 Sending payload:", JSON.stringify(data, null, 2));
+  console.log("📡 Google Sheets Web App:", GOOGLE_SHEETS_WEBHOOK);
+  console.log("📤 Payload:", payload);
 
   /*
-    Google Apps Script web apps can reject a browser CORS preflight
-    when Content-Type is application/json. Sending the same JSON as
-    text/plain avoids the preflight while doPost() can still parse
-    e.postData.contents with JSON.parse().
+    Google Apps Script is cross-origin. Sending application/json can
+    trigger a CORS preflight, so the JSON is sent as text/plain.
+    sendBeacon() is attempted first because it can send the POST without
+    requiring the browser to read a cross-origin response. fetch() is the
+    fallback.
   */
+  try{
+    const blob = new Blob(
+      [payload],
+      {type:"text/plain;charset=UTF-8"}
+    );
+
+    if(navigator.sendBeacon){
+      const queued = navigator.sendBeacon(
+        GOOGLE_SHEETS_WEBHOOK,
+        blob
+      );
+
+      if(queued){
+        submissionSent = true;
+        console.log("✅ Google Sheets submission queued with sendBeacon().");
+        return;
+      }
+    }
+  }catch(error){
+    console.warn("⚠️ sendBeacon() unavailable:", error);
+  }
+
   fetch(GOOGLE_SHEETS_WEBHOOK, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
+    method:"POST",
+    mode:"no-cors",
+    headers:{
+      "Content-Type":"text/plain;charset=utf-8"
     },
-    body: JSON.stringify(data)
+    body:payload,
+    keepalive:true
   })
   .then(() => {
-    console.log("✅ Submission request sent to Google Sheets.");
+    submissionSent = true;
+    console.log("✅ Google Sheets POST request sent.");
   })
   .catch(error => {
     console.error("❌ GOOGLE SHEETS SUBMISSION FAILED:", error);
@@ -4150,13 +4181,9 @@ function showResult(){
     : `You completed all ${answeredCount} questions with ${finalScore} correct.`;
 
   playEndAnimation(won);
-  
-  // Send responses to Excel after animation starts (1.5 second delay)
-  console.log("⏱️ Starting timer to send responses in 1.5 seconds...");
-  setTimeout(() => {
-    console.log("⏰ Timer fired! Calling sendResponsesToExcel()");
-    sendResponsesToExcel();
-  }, 1500);
+
+  // Submit immediately. The result animation continues independently.
+  sendResponsesToExcel();
 }
 
 /* =========================================================
