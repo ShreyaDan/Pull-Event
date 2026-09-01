@@ -1,0 +1,4496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design Quiz Jump</title>
+
+<style>
+
+@font-face{
+  font-family:"ABBvoice Display";
+  src:
+    url("ABBvoiceDisplay_W_SBd.woff") format("woff");
+  font-weight:600;
+  font-style:normal;
+  font-display:swap;
+}
+
+
+@font-face{
+  font-family:"ABBvoice";
+  src:
+    url("Web/WOFF2/ABBvoice_W_Rg.woff2") format("woff2"),
+    url("Web/WOFF/ABBvoice_W_Rg.woff") format("woff");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:"ABBvoice";
+  src:
+    url("Web/WOFF2/ABBvoice_W_Md.woff2") format("woff2"),
+    url("Web/WOFF/ABBvoice_W_Md.woff") format("woff");
+  font-weight:500;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:"ABBvoice";
+  src:
+    url("ABBvoiceDisplay_W_SBd.woff") format("woff");
+  font-weight:600;
+  font-style:normal;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:"ABBvoice";
+  src:
+    url("Web/WOFF2/ABBvoice_W_Bd.woff2") format("woff2"),
+    url("Web/WOFF/ABBvoice_W_Bd.woff") format("woff");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
+
+:root{
+  --red:#ff0011;
+  --green:#18b57c;
+  --ink:#111111;
+  --paper:#ffffff;
+  --line:#d8d8d8;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  font-family:"ABBvoice", Arial, sans-serif;
+  width:100%;
+  min-height:100dvh;
+  margin:0;
+}
+
+body{
+  font-family:"ABBvoice", Arial, sans-serif;
+
+  display:grid;
+  place-items:center;
+  background:#9a9a9a;
+  font-family:"ABBvoice", Arial, sans-serif;
+  color:var(--ink);
+  overflow:hidden;
+}
+
+button,
+input{
+  font-family:"ABBvoice", Arial, sans-serif;
+  font:inherit;
+  color:inherit;
+}
+
+
+/* =========================================================
+   MAIN DISPLAY
+   Target: 1910 × 2160
+   ========================================================= */
+
+.phone{
+  width:min(
+    100vw,
+    1910px,
+    calc(100dvh * 1910 / 2160)
+  );
+
+  aspect-ratio:1910 / 2160;
+
+  max-height:100dvh;
+
+  background:#fff;
+
+  border:0;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  box-shadow:0 1px 0 rgba(0,0,0,.12);
+
+  container-type:inline-size;
+}
+
+
+/* =========================================================
+   LANDING PAGE
+   Refined to match the supplied landing-page reference and ABBvoice typography.
+   ========================================================= */
+
+.landing{
+  position:relative;
+
+  width:100%;
+  height:100%;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f3f3f3 0 32%,
+      #ffffff 32% 100%
+    );
+}
+
+
+/* White ground band + ground line
+   The reference landing page has the robot standing on a
+   clean white ground rather than on the light-grey background. */
+
+.landing::before{
+  content:"";
+
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:17.2%;
+
+  background:#ffffff;
+  z-index:2;
+  pointer-events:none;
+}
+
+.landing::after{
+  content:"";
+
+  position:absolute;
+  left:0;
+  right:0;
+
+  bottom:0;
+
+  height:35%;
+
+  background:#ffffff;
+  border-top:2px solid #d8d8d8;
+  box-sizing:border-box;
+  z-index:3;
+  pointer-events:none;
+}
+
+
+/* Landing information */
+
+.landing-meta{
+  font-family:"ABBvoice", Arial, sans-serif;
+  position:absolute;
+
+  top:3.1%;
+  left:5.3%;
+
+  z-index:8;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:.7cqw;
+
+  font-size:
+    clamp(
+      10px,
+      1.7cqw,
+      32px
+    );
+
+  line-height:1.25;
+}
+
+
+/* Landing hearts */
+
+.landing-lives{
+  font-family:"ABBvoice", Arial, sans-serif;
+  position:absolute;
+
+  top:3.2%;
+  right:5.1%;
+
+  z-index:8;
+
+  display:flex;
+
+  gap:.45cqw;
+}
+
+.landing-lives img{
+  width:4.1cqw;
+  height:4.1cqw;
+
+  min-width:20px;
+  min-height:20px;
+
+  object-fit:contain;
+}
+
+
+
+/* How to play */
+
+.how-to-play{
+  position:absolute;
+
+  z-index:4;
+
+  left:11.8%;
+  top:33%;
+
+  width:50%;
+
+  color:#5a5a5a;
+
+  font-size:
+    clamp(
+      12px,
+      2cqw,
+      36px
+    );
+
+  line-height:1.42;
+
+  font-weight:400;
+}
+
+.how-to-play-title{
+  display:block;
+
+  margin-bottom:.25cqw;
+
+  font-weight:400;
+}
+
+.how-to-play ol{
+  margin:0;
+
+  padding-left:2.1cqw;
+}
+
+.how-to-play li{
+  padding-left:.35cqw;
+}
+
+
+/* Landing title */
+
+.landing-title{
+  font-family:"ABBvoice Display", "ABBvoice", Arial, sans-serif;
+  font-weight:600;
+  position:absolute;
+
+  z-index:4;
+
+  left:11.8%;
+  top:22.2%;
+
+  width:80%;
+
+  margin:0;
+
+  /* Keep the heading from creating a single-word widow on the next line. */
+  white-space:nowrap;
+
+  font-size:
+    clamp(
+      24px,
+      4.4cqw,
+      90px
+    );
+
+  line-height:1.22;
+
+  letter-spacing:-.035em;
+}
+
+
+/* Landing bricks */
+
+.landing-brick{
+  position:absolute;
+
+  z-index:1;
+
+  /* Increased to match the larger, more visible brick clusters
+     in the supplied landing-page reference. */
+  width:25.5%;
+  height:auto;
+
+  opacity:.68;
+
+  pointer-events:none;
+}
+
+.landing-brick.top{
+  top:-1.5%;
+  right:28%;
+
+  transform:scale(1);
+}
+
+.landing-brick.left{
+  left:-1%;
+  bottom:27%;
+
+  transform:scale(1);
+}
+
+.landing-brick.right{
+  right:-1%;
+  bottom:27%;
+
+  transform:scale(.96);
+}
+
+
+/* Landing bubble */
+
+.landing-bubble{
+  font-family:"ABBvoice", Arial, sans-serif;
+  position:absolute;
+
+  z-index:6;
+
+  right:7.4%;
+  bottom:27.5%;
+
+  width:34%;
+
+  aspect-ratio:590 / 359;
+
+  background:
+    url("Thought box 2.png")
+    center / 100% 100%
+    no-repeat;
+
+  display:grid;
+
+  place-items:center;
+
+  padding:7% 8% 12%;
+
+  font-size:
+    clamp(
+      11px,
+      2.2cqw,
+      40px
+    );
+
+  line-height:1.25;
+
+  text-align:left;
+
+  white-space:nowrap;
+}
+
+
+/* Landing robot */
+
+.landing-robot{
+  position:absolute;
+
+  z-index:5;
+
+  right:18.5%;
+  bottom:12%;
+
+  width:15.8%;
+  height:auto;
+
+  object-fit:contain;
+
+  image-rendering:auto;
+}
+
+
+/* Landing shadow */
+
+.landing-shadow{
+  position:absolute;
+
+  z-index:4;
+
+  right:17.7%;
+  bottom:10%;
+
+  width:18%;
+  height:auto;
+
+  opacity:.72;
+}
+
+
+/* Name field */
+
+.name-input{
+  font-family:"ABBvoice", Arial, sans-serif;
+  position:absolute;
+
+  z-index:7;
+
+  left:8%;
+  top:75.4%;
+
+  width:29.3%;
+  height:6.2%;
+
+  min-height:52px;
+
+  border:2px solid #d9d9d9;
+
+  border-radius:1.2cqw;
+
+  background:#ffffff;
+
+  padding:0 1.5cqw;
+
+  outline:none;
+
+  font:
+    700
+    clamp(
+      12px,
+      1.75cqw,
+      34px
+    )
+    "ABBvoice",
+    Arial,
+    sans-serif;
+}
+
+.name-input::placeholder{
+  color:#222;
+  opacity:1;
+}
+
+.name-input:focus{
+  border-color:#bcbcbc;
+}
+
+
+/* =========================================================
+   ROLE DROPDOWN
+   ========================================================= */
+
+.role-select-wrapper{
+  position:absolute;
+  z-index:100;
+  left:8%;
+  top:75.4%;
+  width:29.3%;
+  height:6.2%;
+  min-height:52px;
+  box-sizing:border-box;
+}
+
+.role-select-trigger{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 1.5cqw;
+  border:3.5px solid #d9d9d9;
+  border-radius:1.2cqw;
+  background:#fff;
+  color:#222;
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-size:clamp(12px, 1.75cqw, 34px);
+  font-weight:400;
+  line-height:1.2;
+  text-align:left;
+  cursor:pointer;
+  pointer-events:auto;
+  outline:none;
+  transition:border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.role-select-trigger.placeholder{color:#6a6a6a;}
+.role-select-trigger:hover{border-color:#bcbcbc;}
+.role-select-trigger:focus-visible{border-color:#999; box-shadow:0 0 0 2px rgba(0,0,0,.04);}
+
+.role-caret{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:none;
+  width:1.35em;
+  height:1.35em;
+  margin-left:1cqw;
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-size:1em;
+  font-weight:500;
+  line-height:1;
+  color:#222;
+  pointer-events:none;
+  transform:translateY(-.04em);
+}
+
+.role-menu{
+  position:absolute;
+  left:1.5%;
+  right:1.5%;
+  bottom:calc(100% + .65cqw);
+  display:flex;
+  flex-direction:column;
+  padding:.55cqw 0;
+  background:#fff;
+  border:1.5px solid #bfbfbf;
+  border-radius:1cqw;
+  box-shadow:0 .7cqw 1.8cqw rgba(0,0,0,.16), 0 .15cqw .35cqw rgba(0,0,0,.08);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(.45cqw);
+  transition:opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+}
+
+.role-select-wrapper.open .role-menu{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+.role-option{
+  width:100%;
+  display:block;
+  padding:.72cqw 1.25cqw;
+  border:0;
+  background:transparent;
+  color:#222;
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-size:clamp(12px, 1.7cqw, 33px);
+  font-weight:400;
+  line-height:1.25;
+  text-align:left;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.role-option:hover,.role-option:focus-visible{background:#f4f4f4; outline:none;}
+.role-option:active{background:#ededed;}
+.role-option.selected{font-weight:500;}
+
+/* Start button */
+
+
+
+
+.start-quiz{
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-weight:500;
+  position:absolute;
+
+  z-index:9;
+
+  left:8%;
+  top:83.7%;
+
+  transform:none;
+
+  border:0;
+
+  border-radius:1.9cqw;
+
+  background:var(--red);
+
+  color:#fff;
+
+  min-width:11.2%;
+  min-height:6.3%;
+
+  padding:
+    1.2cqw
+    2.6cqw;
+
+  font-size:
+    clamp(
+      14px,
+      2.15cqw,
+      42px
+    );
+
+  cursor:pointer;
+
+  transition:
+    transform 140ms ease,
+    filter 140ms ease;
+}
+
+.start-quiz:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  filter:none;
+}
+
+.start-quiz:disabled:hover{
+  filter:none;
+  transform:none;
+}
+
+.start-quiz:hover{
+  filter:brightness(.96);
+
+  transform:
+    translateY(-1px);
+}
+
+.start-quiz:active{
+  transform:
+    translateY(1px);
+}
+
+
+/* =========================================================
+   QUIZ GAME
+   ========================================================= */
+
+.game{
+  position:relative;
+
+  width:100%;
+  height:100%;
+
+  display:grid;
+
+  grid-template-rows:
+    57%
+    43%;
+
+  background:#fff;
+}
+
+.game.hidden{
+  display:none;
+}
+
+
+/* =========================================================
+   GAME WORLD
+   ========================================================= */
+
+.stage{
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      90deg,
+      #f3f3f3 0 32%,
+      #ffffff 32% 100%
+    );
+
+  border-bottom:2px solid #d8d8d8;
+}
+
+
+/* =========================================================
+   GAME HEADER
+   ========================================================= */
+
+.hud{
+  font-family:"ABBvoice", Arial, sans-serif;
+  position:absolute;
+
+  top:0;
+  left:0;
+  right:0;
+
+  z-index:20;
+
+  height:13.5%;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:
+    0
+    5.3%;
+
+  background:#fff;
+
+  border-bottom:4px solid #dedede;
+
+  font-size:
+    clamp(
+      12px,
+      2.05cqw,
+      40px
+    );
+}
+
+
+/* Question number */
+
+#questionLabel{
+  display:block;
+
+  line-height:1;
+
+  margin-top:-1%;
+}
+
+
+/* Lives */
+
+.lives{
+  display:flex;
+
+  align-items:center;
+
+  gap:.35cqw;
+}
+
+.life{
+  width:4.1cqw;
+  height:4.1cqw;
+
+  min-width:22px;
+  min-height:22px;
+
+  object-fit:contain;
+}
+
+
+/* =========================================================
+   PLATFORM LAYER
+   ========================================================= */
+
+.platform-layer{
+  position:absolute;
+
+  left:0;
+  right:0;
+  top:13.5%;
+  bottom:0;
+
+  z-index:1;
+
+  pointer-events:none;
+
+  transition:
+    transform
+    720ms
+    cubic-bezier(.22,1,.36,1);
+}
+
+.platform-source{
+  display:none;
+}
+
+
+/* Platform */
+
+.platform{
+  position:absolute;
+
+  width:38.7%;
+
+  height:8.75%;
+
+  background:
+    linear-gradient(
+      #ff0011 0 78%,
+      #df000d 78% 100%
+    );
+
+  opacity:0;
+
+  transition:
+    opacity 180ms ease;
+}
+
+.platform.left{
+  left:0;
+}
+
+
+.platform.right{
+  right:0;
+}
+
+
+/* =========================================================
+   WINNING FLAG
+   Shown only when all 5 answers are correct and all lives
+   are still intact. It sits on the final red platform.
+   ========================================================= */
+
+.winning-flag{
+  position:absolute;
+
+  z-index:4;
+
+  width:9.5%;
+
+  height:auto;
+
+  left:14%;
+
+  top:0;
+
+  display:block;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  image-rendering:auto;
+
+  transform-origin:center bottom;
+
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.winning-flag.show{
+  opacity:1;
+
+  transform:translateY(0);
+}
+
+
+
+/* =========================================================
+   DECORATIVE BRICKS
+   ========================================================= */
+
+.brick{
+  position:absolute;
+
+  z-index:0;
+
+  width:24%;
+  height:20%;
+
+  opacity:.95;
+
+  background:
+    url("Brick.png")
+    center / contain
+    no-repeat;
+}
+
+.brick.one{
+  right:40%;
+  top:7%;
+
+  transform:scale(1.1);
+}
+
+.brick.two{
+  left:2%;
+  top:72%;
+
+  transform:scale(1.12);
+}
+
+.brick.three{
+  right:2%;
+  top:72%;
+
+  transform:scale(1.06);
+}
+
+
+/* =========================================================
+   ROBOT
+   ========================================================= */
+
+.hero{
+  position:absolute;
+
+  left:50%;
+  top:auto;
+  bottom:0;
+
+  z-index:5;
+
+  width:13.8%;
+  height:27%;
+
+  transform:translateX(-50%);
+
+  will-change:
+    left,
+    top,
+    transform;
+
+  backface-visibility:hidden;
+}
+
+.hero.wrong{
+  animation:
+    wobble
+    420ms
+    ease-in-out;
+}
+
+
+/* Robot shadow */
+
+.hero-shadow{
+  position:absolute;
+
+  left:50%;
+  bottom:-1px;
+
+  width:80%;
+
+  transform:translateX(-50%);
+
+  opacity:.7;
+
+  image-rendering:auto;
+}
+
+
+/* Robot sprite */
+
+.hero-sprite{
+  display:block;
+
+  position:absolute;
+
+  left:50%;
+  bottom:0;
+
+  /*
+    Both sprite layers share exactly the same visual box.
+    Crossfading between the four supplied poses removes the
+    hard "teleport" that can happen when one image is replaced.
+  */
+  width:100%;
+  height:100%;
+
+  max-width:none;
+
+  object-fit:contain;
+  object-position:center bottom;
+
+  transform:
+    translateX(-50%)
+    scaleX(var(--face-dir,1));
+
+  z-index:2;
+
+  transform-origin:
+    center bottom;
+
+  image-rendering:auto;
+
+  backface-visibility:hidden;
+
+  opacity:0;
+
+  transition:
+    opacity 95ms linear;
+}
+
+.hero-sprite.is-visible{
+  opacity:1;
+}
+
+
+/* =========================================================
+   THOUGHT BUBBLE
+   ========================================================= */
+
+.bubble{
+  position:absolute;
+
+  z-index:6;
+
+  left:50%;
+  top:43%;
+
+  width:35%;
+  height:29%;
+
+  transform:scale(.96);
+
+  display:grid;
+
+  place-items:center;
+
+  box-sizing:border-box;
+
+  padding:
+    2%
+    3%
+    5%;
+
+  background:
+    url("Thought box 1.png")
+    center / 100% 100%
+    no-repeat;
+
+  font-size:
+    clamp(
+      8px,
+      1.6cqw,
+      30px
+    );
+
+  line-height:1.25;
+
+  text-align:center;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:
+    opacity 200ms ease,
+    transform 220ms ease;
+}
+
+.bubble.show{
+  opacity:1;
+
+  transform:scale(1);
+}
+
+.bubble.large{
+  width:37.5%;
+  height:30%;
+
+  background-image:
+    url("Thought box 2.png");
+}
+
+
+/* =========================================================
+   QUESTION / ANSWER PANEL
+   ========================================================= */
+
+.quiz{
+  position:relative;
+
+  z-index:10;
+
+  /*
+    Keep the existing 1910 × 2160 interface ratio
+    and the slightly expanded 57% / 43% game split.
+
+    Quiz-area and panel padding are reduced to 75%
+    of the previous values. The answer panel still
+    sizes to its content instead of stretching to
+    the full height of the lower section.
+  */
+
+  padding:
+    4.2%
+    5.2%
+    4.2%;
+
+  background:#fff;
+}
+
+
+/* Main panel */
+
+.panel{
+  width:100%;
+  height:auto;
+
+  border:
+    0.525cqw
+    solid
+    #c9c9c9;
+
+  border-radius:
+    1.4cqw;
+  padding:
+    3.0cqw
+    3.0cqw
+    3.0cqw
+    3.0cqw;
+
+  background:#fff;
+}
+
+
+/* Question */
+
+.prompt{
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-weight:500;
+  margin:
+    0
+    0
+    3.2cqw;
+
+  font-size:
+    clamp(
+      12px,
+      2.55cqw,
+      49px
+    );
+
+  line-height:1.2;
+
+  letter-spacing:-.015em;
+}
+
+
+/* Answer grid */
+
+.answers{
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap:
+    2.0cqw
+    2.0cqw;
+}
+
+
+/* Answer buttons */
+
+.answer{
+  font-family:"ABBvoice", Arial, sans-serif;
+  min-height:
+    clamp(
+      55px,
+      6.2cqw,
+      118px
+    );
+
+  border:
+    2px
+    solid
+    #dddddd;
+
+  border-radius:
+    1cqw;
+
+  background:#fff;
+
+  padding:
+    1.15cqw
+    1.8cqw;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:flex-start;
+
+  text-align:left;
+
+  font-size:
+    clamp(
+      10px,
+      1.9cqw,
+      37px
+    );
+
+  line-height:1.25;
+
+  cursor:pointer;
+
+  transition:
+    border-color 140ms ease,
+    background 140ms ease,
+    transform 140ms ease;
+}
+
+
+/* Touch feedback */
+
+.answer:hover:not(:disabled){
+  border-color:#adadad;
+
+  transform:
+    translateY(-1px);
+}
+
+.answer:active:not(:disabled){
+  transform:
+    translateY(1px);
+}
+
+
+/* Correct */
+
+.answer.correct{
+  border-color:var(--green);
+
+  background:#f8fffc;
+}
+
+
+/* Wrong */
+
+.answer.wrong{
+  border-color:var(--red);
+
+  background:#fffafa;
+}
+
+.answer:disabled{
+  cursor:default;
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+   ========================================================= */
+
+.next{
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-weight:500;
+  display:block;
+  margin:2.0cqw auto 0;
+  border:0;
+  border-radius:1.7cqw;
+  background:var(--red);
+  color:#fff;
+  min-width:21%;
+  min-height:6.2cqw;
+  padding:1.0cqw 2.5cqw;
+  font-size:clamp(12px, 1.75cqw, 34px);
+  line-height:1.1;
+  cursor:pointer;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(4px);
+  transition:opacity 180ms ease, transform 180ms ease, filter 140ms ease;
+}
+
+.next.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+.next:hover{
+  filter:brightness(.96);
+}
+
+.next:active{
+  transform:translateY(1px);
+}
+
+
+/* =========================================================
+   END-OF-QUIZ ANIMATIONS
+   ========================================================= */
+
+.result-animation{
+  width:100%;
+  height:clamp(150px, 24cqw, 270px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:1.5%;
+  overflow:visible;
+}
+
+.result-animation img{
+  display:block;
+  width:auto;
+  height:auto;
+  max-width:90%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+.result-animation.heartbreak img{
+  width:clamp(90px, 15cqw, 140px);
+}
+
+.result-animation.trofee img{
+  height:clamp(90px, 17cqw, 216px);
+}
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+.result{
+  display:none;
+
+  width:100%;
+  height:100%;
+
+  place-items:center;
+  padding:6%;
+  text-align:center;
+  background:#fff;
+}
+
+.result.active{
+  display:grid;
+}
+
+.result-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.result h1{
+  font-family:"ABBvoice Display", "ABBvoice", Arial, sans-serif;
+  margin:0 0 2%;
+  font-size:clamp(28px, 4.2cqw, 72px);
+  line-height:1.1;
+}
+
+.result-score{
+  font-family:"ABBvoice Display", "ABBvoice", Arial, sans-serif;
+  margin:0 0 1.5%;
+  font-size:clamp(42px, 7cqw, 110px);
+  line-height:1;
+}
+
+.result p{
+  font-family:"ABBvoice", Arial, sans-serif;
+  margin:0 0 3%;
+  font-size:clamp(13px, 1.8cqw, 32px);
+  line-height:1.4;
+}
+
+.restart{
+  font-family:"ABBvoice", Arial, sans-serif;
+  font-weight:500;
+  border:0;
+
+  border-radius:1.9cqw;
+
+  background:var(--red);
+
+  color:white;
+
+  min-width:11.2%;
+  min-height:6.3%;
+
+  padding:
+    1.2cqw
+    2.6cqw;
+
+  font-size:
+    clamp(
+      14px,
+      2.15cqw,
+      42px
+    );
+
+  cursor:pointer;
+
+  transition:
+    transform 140ms ease,
+    filter 140ms ease;
+}
+
+.restart:hover{
+  filter:brightness(.96);
+
+  transform:
+    translateY(-1px);
+}
+
+.restart:active{
+  transform:
+    translateY(1px);
+}
+
+
+/* =========================================================
+   ROBOT WRONG-ANSWER ANIMATION
+   ========================================================= */
+
+@keyframes wobble{
+
+  0%,
+  100%{
+    transform:
+      translateX(-50%)
+      rotate(0);
+  }
+
+  25%{
+    transform:
+      translateX(-57%)
+      rotate(-7deg);
+  }
+
+  55%{
+    transform:
+      translateX(-44%)
+      rotate(6deg);
+  }
+
+  78%{
+    transform:
+      translateX(-53%)
+      rotate(-3deg);
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:440px){
+
+  body{
+    overflow:auto;
+  }
+
+  .phone{
+    width:100vw;
+
+    aspect-ratio:
+      768 / 923;
+
+    max-height:none;
+
+    border-radius:0;
+
+    border-width:0;
+  }
+
+}
+
+
+@media
+(min-width:441px)
+and
+(max-width:768px){
+
+  body{
+    background:#fff;
+  }
+
+  .phone{
+    width:100vw;
+
+    aspect-ratio:
+      768 / 923;
+
+    max-height:none;
+
+    border-radius:28px;
+
+    border-width:0;
+  }
+
+}
+
+</style>
+
+<style id="thought-box-font-adjustment">
+.thought-box, .thought-box *, .thought, .thought * { font-size: 24px !important; }
+</style>
+
+<style id="thought-box-font-40px">
+/* Thought-box feedback text */
+.thought-box,
+.thought-box *,
+.thought,
+.thought * {
+  font-size: 40px !important;
+}
+</style>
+
+</head>
+
+
+<body>
+
+<main
+  class="phone"
+  aria-label="Design quiz game"
+>
+
+
+<!-- =======================================================
+     LANDING PAGE
+     ======================================================= -->
+
+<section
+  class="landing"
+  id="landing"
+  aria-label="Quiz introduction"
+>
+
+
+  <div class="landing-meta">
+
+    <span>
+      No. of Questions: 5
+    </span>
+
+    <span>
+      Time: 2-3 minutes
+    </span>
+
+  </div>
+
+
+  <div
+    class="landing-lives"
+    aria-label="Lives"
+  >
+
+    <img src="Life.png" alt="">
+    <img src="Life.png" alt="">
+    <img src="Life.png" alt="">
+
+  </div>
+
+
+  <img
+    class="landing-brick top"
+    src="Brick.png"
+    alt=""
+  >
+
+  <img
+    class="landing-brick left"
+    src="Brick.png"
+    alt=""
+  >
+
+  <img
+    class="landing-brick right"
+    src="Brick.png"
+    alt=""
+  >
+
+
+  <h1 class="landing-title">
+    How Design-Savvy Are You?
+  </h1>
+
+
+  <div class="how-to-play">
+    <span class="how-to-play-title">How to Play:</span>
+
+    <ol>
+      <li>Read the question</li>
+      <li>Pick your answer</li>
+      <li>Get instant feedback</li>
+      <li>Learn a design fact</li>
+      <li>Check your final score</li>
+    </ol>
+  </div>
+
+
+  <div class="role-select-wrapper" id="roleDropdown">
+
+    <button
+      class="role-select-trigger placeholder"
+      id="roleSelectTrigger"
+      type="button"
+      aria-label="Choose your role"
+      aria-haspopup="listbox"
+      aria-expanded="false"
+      aria-disabled="false"
+    >
+      <span id="roleSelectValue">Choose your role</span>
+      <span class="role-caret" aria-hidden="true">⌄</span>
+    </button>
+
+    <div
+      class="role-menu"
+      id="roleMenu"
+      role="listbox"
+      aria-label="Choose your role"
+    >
+      <button type="button" class="role-option" role="option" data-value="M">Management</button>
+      <button type="button" class="role-option" role="option" data-value="DS">Design</button>
+      <button type="button" class="role-option" role="option" data-value="DEV">Development</button>
+      <button type="button" class="role-option" role="option" data-value="TST">Testing</button>
+      <button type="button" class="role-option" role="option" data-value="ENG">Engineering</button>
+      <button type="button" class="role-option" role="option" data-value="STK">Stakeholder / Sales</button>
+    </div>
+
+  </div>
+
+
+
+  <div class="landing-bubble">
+    Hey! Ready to play?
+  </div>
+
+
+  <img
+    class="landing-shadow"
+    src="shadow/Resting Shadow.png"
+    alt=""
+  >
+
+  <img
+    class="landing-robot"
+    src="Character Profile/Front.png"
+    alt="Quiz robot"
+  >
+
+
+  <button
+    class="start-quiz"
+    id="startQuizBtn"
+    type="button"
+  >
+    Start quiz
+  </button>
+
+</section>
+
+
+<!-- =======================================================
+     QUIZ GAME
+     ======================================================= -->
+
+<section
+  class="game hidden"
+  id="game"
+>
+
+
+  <!-- GAME WORLD -->
+
+  <div
+    class="stage"
+    id="stage"
+  >
+
+
+    <!-- HEADER -->
+
+    <div class="hud">
+
+      <span id="questionLabel">
+        Question 1
+      </span>
+
+      <div
+        class="lives"
+        id="lives"
+        aria-label="Lives"
+      ></div>
+
+    </div>
+
+
+    <!-- PLATFORMS -->
+
+    <div
+      class="platform-layer"
+      id="platformLayer"
+    >
+
+      <img
+        class="platform-source"
+        src="Platforms.png"
+        alt=""
+      >
+
+      <img
+        class="winning-flag"
+        id="winningFlag"
+        src="Flag 1.png"
+        alt=""
+      >
+
+    </div>
+
+
+    <!-- DECORATIVE BRICKS -->
+
+    <div class="brick one"></div>
+    <div class="brick two"></div>
+    <div class="brick three"></div>
+
+
+    <!-- SPEECH BUBBLE -->
+
+    <div
+      class="bubble show"
+      id="bubble"
+    >
+      Select the correct option...
+    </div>
+
+
+    <!-- ROBOT -->
+
+    <div
+      class="hero"
+      id="hero"
+    >
+
+      <img
+        class="hero-shadow"
+        id="shadow"
+        src="shadow/Wave 1 shadow.png"
+        alt=""
+      >
+
+      <img
+        class="hero-sprite hero-sprite-a is-visible"
+        id="spriteA"
+        src="wave/Wave 1.png"
+        alt="Quiz robot"
+      >
+
+      <img
+        class="hero-sprite hero-sprite-b"
+        id="spriteB"
+        src="wave/Wave 1.png"
+        alt=""
+        aria-hidden="true"
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- QUESTION PANEL -->
+
+  <div class="quiz">
+
+    <div class="panel">
+
+      <p
+        class="prompt"
+        id="prompt"
+      ></p>
+
+      <div
+        class="answers"
+        id="answers"
+      ></div>
+
+    </div>
+
+
+    <button
+      class="next"
+      id="nextBtn"
+      type="button"
+    >
+      Next Question >
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =======================================================
+     RESULT
+     ======================================================= -->
+
+<section
+  class="result"
+  id="result"
+  aria-live="polite"
+>
+
+  <div class="result-content">
+
+    <div class="result-animation" id="resultAnimation" aria-hidden="true">
+      <img id="resultAnimationFrame" src="" alt="">
+    </div>
+
+    <h1 id="resultTitle">
+      Level Complete
+    </h1>
+
+    <div
+      class="result-score"
+      id="resultScore"
+    >
+      0 / 5
+    </div>
+
+    <p id="scoreText"></p>
+
+    <button
+      class="restart"
+      id="restartBtn"
+      type="button"
+    >
+      Play Again
+    </button>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+
+
+<script>
+
+/* =========================================================
+   ASSETS
+   ========================================================= */
+
+const assets = {
+
+  wave:[
+    "wave/Wave 1.png",
+    "wave/Wave 2.png",
+    "wave/Wave 3.png",
+    "wave/Wave 4.png"
+  ],
+
+  jump:[
+    "Jump/Jump 1.png",
+    "Jump/jump 2.png",
+    "Jump/Jump 3.png",
+    "Jump/Jump 4.png",
+    "Jump/Jump 5.png",
+    "Jump/Jump 6.png"
+  ],
+
+  jumpShadow:
+    "shadow/Resting Shadow.png",
+
+  waveShadow:
+    "shadow/Wave 1 shadow.png",
+
+  life:
+    "Life.png",
+
+  lifeLost:
+    "Life Lost.png",
+
+  flag:[
+    "Flag 1.png",
+    "Flag 2.png"
+  ],
+
+  heartbreak:[
+    "Hearbreak/HeartBreak1.png",
+    "Hearbreak/HeartBreak2.png",
+    "Hearbreak/HeartBreak3.png",
+    "Hearbreak/HeartBreak4.png",
+    "Hearbreak/HeartBreak5.png",
+    "Hearbreak/HeartBreak6.png",
+    "Hearbreak/HeartBreak7.png"
+  ],
+
+  trofee:[
+    "Trofee/Trofee1.png",
+    "Trofee/Trofee2.png",
+    "Trofee/Trofee3.png",
+    "Trofee/Trofee 4.png",
+    "Trofee/Trofee5.png"
+  ]
+
+};
+
+
+/* =========================================================
+   PRELOAD
+   ========================================================= */
+
+Object
+  .values(assets)
+  .flat()
+  .concat([
+    "Platforms.png",
+    "Brick.png",
+    "Thought box 1.png",
+    "Thought box 2.png"
+  ])
+  .concat(assets.heartbreak, assets.trofee)
+  .forEach(source => {
+
+    const image =
+      new Image();
+
+    image.src =
+      source;
+
+  });
+
+
+/* =========================================================
+   QUESTIONS
+   ========================================================= */
+
+// Question content lives in question-bank.js so the bank remains the single source of truth.
+// Question content is embedded here so the quiz also works when index.html is opened
+// or previewed without a separate JavaScript file. This array remains the single source of truth.
+const questionBank = [
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV01",
+  "role": "Development",
+  "workflowThemeCode": "WF05",
+  "prompt": "Why should designers understand technical constraints?",
+  "options": [
+    "To write the code themselves",
+    "To create solutions that are feasible",
+    "To reduce developer involvement",
+    "It is developer’s responsibility, designer should not bother"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Understanding technical constraints helps designers make better, more realistic decisions."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV02",
+  "role": "Development",
+  "workflowThemeCode": "WF08",
+  "prompt": "Why is using a shared component library important?",
+  "options": [
+    "To keep the interface consistent",
+    "To reduce user testing",
+    "To limit design decisions",
+    "To replace design documentation"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Shared components reduce unnecessary variation and make products easier to maintain."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV03",
+  "role": "Development",
+  "workflowThemeCode": "WF08",
+  "prompt": "Why does a designer care about precise alignment?",
+  "options": [
+    "It creates a polished, trustworthy interface.",
+    "It improves system performance",
+    "It just increases the delivery time",
+    "Precise alignment is not that important if the product works fine."
+  ],
+  "rightAnswer": "A",
+  "feedback": "Small details create a polished experience and build brand trust."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV04",
+  "role": "Development",
+  "workflowThemeCode": "WF05",
+  "prompt": "Why is cross-functional collaboration important in enterprise UX?",
+  "options": [
+    "It creates more meetings",
+    "Complex products need multiple perspectives",
+    "It gives designers more control",
+    "It reduces the need for documentation"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Enterprise products involve many disciplines, so good solutions often come from combining their perspectives."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV05",
+  "role": "Development",
+  "workflowThemeCode": "WF10",
+  "prompt": "Why does accessibility matter in design?",
+  "options": [
+    "It helps more people use the product",
+    "It reduces the number of features",
+    "It simplifies every interface",
+    "It removes the need for testing"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Accessible design removes barriers and makes products usable by people with different abilities."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV06",
+  "role": "Development",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV07",
+  "role": "Development",
+  "workflowThemeCode": "WF09",
+  "prompt": "What is a key difference between art and design?",
+  "options": [
+    "Design solves a specific problem",
+    "Design always uses digital tools",
+    "Art focuses only on visual beauty",
+    "Design always follows fixed rules"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Design uses creativity to solve a specific problem for a user or business."
+},
+  {
+  "sectionCode": "DEV",
+  "questionCode": "DEV08",
+  "role": "Development",
+  "workflowThemeCode": "WF04",
+  "prompt": "Should design decisions focus only on what users want?",
+  "options": [
+    "Yes, user needs should always come first",
+    "No, they should balance users, business, and feasibility",
+    "Yes, if research supports the need",
+    "No, business goals should come first"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Strong product decisions balance user needs, business goals, and feasibility."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK01",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF09",
+  "prompt": "How can good design reduce costs?",
+  "options": [
+    "By removing features",
+    "By reducing support and redesign work",
+    "By using fewer visual elements",
+    "By shortening the launch process"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Good design can prevent avoidable support issues and costly redesigns later."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK02",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF03",
+  "prompt": "Why shouldn't a designer simply copy a competitor?",
+  "options": [
+    "The competitor may change the feature",
+    "It may not address your users' needs",
+    "The interface may look too similar",
+    "It may take longer to develop"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Good design begins with understanding your own users, rather than copying what another product does."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK03",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF09",
+  "prompt": "Why should designers communicate UX in business terms?",
+  "options": [
+    "To make presentations shorter",
+    "To connect design decisions to business outcomes",
+    "To avoid showing designs",
+    "To reduce stakeholder feedback"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Showing how UX affects efficiency, adoption, errors, or support helps stakeholders understand its business value."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK04",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF09",
+  "prompt": "Why is user experience important in enterprise sales?",
+  "options": [
+    "It makes presentations more attractive",
+    "A usable product can create stronger customer value",
+    "It reduces the number of product features",
+    "It replaces sales conversations"
+  ],
+  "rightAnswer": "B",
+  "feedback": "For enterprise customers, usability can affect productivity, adoption, training, and long-term satisfaction."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK05",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF04",
+  "prompt": "If user needs and business goals conflict, what should guide the decision?",
+  "options": [
+    "The stakeholder with the most influence",
+    "The fastest option to build",
+    "Evidence about user and business needs",
+    "The option with the most features"
+  ],
+  "rightAnswer": "C",
+  "feedback": "Strong product decisions balance user needs, business goals, technical constraints, and evidence."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK06",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK07",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF04",
+  "prompt": "Should design decisions focus only on what users want?",
+  "options": [
+    "Yes, user needs should always come first",
+    "No, they should balance users, business, and feasibility",
+    "Yes, if research supports the need",
+    "No, business goals should come first"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Strong product decisions balance user needs, business goals, and feasibility."
+},
+  {
+  "sectionCode": "STK",
+  "questionCode": "STK08",
+  "role": "Stakeholders / Sales",
+  "workflowThemeCode": "WF09",
+  "prompt": "Should designers understand business goals?",
+  "options": [
+    "Yes, to connect user needs with business outcomes",
+    "No, because design should focus only on users",
+    "Yes, to make product decisions independently",
+    "No, because business goals belong to leadership"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Strong design connects user value with business goals."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST01",
+  "role": "Testing",
+  "workflowThemeCode": "WF06",
+  "prompt": "Why does a designer want screenshots of bugs?",
+  "options": [
+    "To understand what the user sees",
+    "To document every test",
+    "To compare different devices",
+    "To verify the tester's setup"
+  ],
+  "rightAnswer": "A",
+  "feedback": "A screenshot gives designers useful visual context about the problem users are experiencing."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST02",
+  "role": "Testing",
+  "workflowThemeCode": "WF09",
+  "prompt": "What if an app works perfectly but looks poor?",
+  "options": [
+    "The experience still needs improvement",
+    "The functionality is all that matters",
+    "Testing should focus only on bugs",
+    "Visual design can be ignored"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Functionality matters, but visual quality also affects trust, clarity, and the overall experience."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST03",
+  "role": "Testing",
+  "workflowThemeCode": "WF06",
+  "prompt": "Is it necessary to test the full user journey?",
+  "options": [
+    "Yes, it ensures the entire flow works",
+    "No, it increases individual screen testing",
+    "No, just testing the main feature is enough",
+    "Yes, it helps to measure development speed"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Individual screens may work well while the overall journey still feels confusing."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST04",
+  "role": "Testing",
+  "workflowThemeCode": "WF10",
+  "prompt": "Why does accessibility matter in design?",
+  "options": [
+    "It helps more people use the product",
+    "It reduces the number of features",
+    "It simplifies every interface",
+    "It removes the need for testing"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Accessible design removes barriers and makes products usable by people with different abilities."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST05",
+  "role": "Testing",
+  "workflowThemeCode": "WF09",
+  "prompt": "What is a key difference between art and design?",
+  "options": [
+    "Design solves a specific problem",
+    "Design always uses digital tools",
+    "Art focuses only on visual beauty",
+    "Design always follows fixed rules"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Design uses creativity to solve a specific problem for a user or business."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST06",
+  "role": "Testing",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST07",
+  "role": "Testing",
+  "workflowThemeCode": "WF04",
+  "prompt": "Should design decisions focus only on what users want?",
+  "options": [
+    "Yes, user needs should always come first",
+    "No, they should balance users, business, and feasibility",
+    "Yes, if research supports the need",
+    "No, business goals should come first"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Strong product decisions balance user needs, business goals, and feasibility."
+},
+  {
+  "sectionCode": "TST",
+  "questionCode": "TST08",
+  "role": "Testing",
+  "workflowThemeCode": "WF01",
+  "prompt": "Is user research only useful at the start of a project?",
+  "options": [
+    "Yes, once the problem is understood",
+    "No, research can inform decisions throughout",
+    "Yes, testing replaces research later",
+    "No, but only when the product changes"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Research can inform decisions throughout the product lifecycle."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS01",
+  "role": "Design",
+  "workflowThemeCode": "WF08",
+  "prompt": "Why is consistency important in an interface?",
+  "options": [
+    "It helps users rely on familiar patterns",
+    "It reduces the need for testing",
+    "It lets designers reuse every screen",
+    "It makes all the products look similar."
+  ],
+  "rightAnswer": "A",
+  "feedback": "Consistent patterns reduce the effort users need to learn an interface."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS02",
+  "role": "Design",
+  "workflowThemeCode": "WF02",
+  "prompt": "Why observe users instead of only asking what they want?",
+  "options": [
+    "Their behavior can reveal hidden problems",
+    "Users often avoid giving feedback",
+    "Interviews cannot reveal user needs",
+    "Observation requires less research"
+  ],
+  "rightAnswer": "A",
+  "feedback": "People may describe what they think they do, while observation reveals what they actually do."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS03",
+  "role": "Design",
+  "workflowThemeCode": "WF09",
+  "prompt": "What is a key difference between art and design?",
+  "options": [
+    "Design solves a specific problem",
+    "Design always uses digital tools",
+    "Art focuses only on visual beauty",
+    "Design always follows fixed rules"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Design uses creativity to solve a specific problem for a user or business."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS04",
+  "role": "Design",
+  "workflowThemeCode": "WF10",
+  "prompt": "Why does accessibility matter in design?",
+  "options": [
+    "It helps more people use the product",
+    "It reduces the number of features",
+    "It simplifies every interface",
+    "It removes the need for testing"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Accessible design removes barriers and makes products usable by people with different abilities."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS05",
+  "role": "Design",
+  "workflowThemeCode": "WF02",
+  "prompt": "Why do designers create personas?",
+  "options": [
+    "To represent key user types",
+    "To define project responsibilities",
+    "To plan marketing campaigns",
+    "To document technical needs"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Personas help teams keep key user needs in mind when making design decisions."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS06",
+  "role": "Design",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS07",
+  "role": "Design",
+  "workflowThemeCode": "WF04",
+  "prompt": "Should design decisions focus only on what users want?",
+  "options": [
+    "Yes, user needs should always come first",
+    "No, they should balance users, business, and feasibility",
+    "Yes, if research supports the need",
+    "No, business goals should come first"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Strong product decisions balance user needs, business goals, and feasibility."
+},
+  {
+  "sectionCode": "DS",
+  "questionCode": "DS08",
+  "role": "Design",
+  "workflowThemeCode": "WF03",
+  "prompt": "Should design happen before the problem is fully understood?",
+  "options": [
+    "Yes, to explore possible solutions quickly",
+    "No, the problem should be understood first",
+    "Yes, if stakeholders have a preferred solution",
+    "No, because design should start after development"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Understanding the problem first helps teams avoid designing the wrong solution."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG01",
+  "role": "Engineering",
+  "workflowThemeCode": "WF10",
+  "prompt": "Why should an enterprise UX designer understand the physical environment?",
+  "options": [
+    "Physical Environment does not fall under UX design.",
+    "The environment can affect how the interface is used",
+    "To reduce the number of screens",
+    "To choose the brand colors"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Noise, lighting, gloves, distance, and movement can all change how people interact with a system."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG02",
+  "role": "Engineering",
+  "workflowThemeCode": "WF02",
+  "prompt": "Why should a designer visit the actual worksite?",
+  "options": [
+    "To understand the real environment and how people interact with it",
+    "To observe how the software is coded",
+    "To redesign the physical machine",
+    "This is not a real concern for a designer"
+  ],
+  "rightAnswer": "A",
+  "feedback": "The worksite reveals how sight, sound, touch, movement, and other senses shape the user’s interaction with the system."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG03",
+  "role": "Engineering",
+  "workflowThemeCode": "WF10",
+  "prompt": "Should wearing gloves be a design consideration for factory workers?",
+  "options": [
+    "Gloves can make touch interactions less precise",
+    "Gloves can make screens harder to see",
+    "Gloves can make touchscreens feel less familiar",
+    "Workers’ gloves are not a digital designer’s concern"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Gloves can reduce touch precision, so interfaces need larger, easier-to-hit controls."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG04",
+  "role": "Engineering",
+  "workflowThemeCode": "WF10",
+  "prompt": "Is it required for a digital designer to consider physical buttons?",
+  "options": [
+    "Yes, to connect physical and digital interactions",
+    "No, if the digital interface works independently",
+    "Yes, to redesign the physical controls",
+    "No, because buttons are part of hardware design"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Users experience the machine as one system, so physical and digital controls should work together."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG05",
+  "role": "Engineering",
+  "workflowThemeCode": "WF09",
+  "prompt": "What is a key difference between art and design?",
+  "options": [
+    "Design solves a specific problem",
+    "Design always uses digital tools",
+    "Art focuses only on visual beauty",
+    "Design always follows fixed rules"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Design uses creativity to solve a specific problem for a user or business."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG06",
+  "role": "Engineering",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "ENG",
+  "questionCode": "ENG07",
+  "role": "Engineering",
+  "workflowThemeCode": "WF03",
+  "prompt": "Should design happen before the problem is fully understood?",
+  "options": [
+    "Yes, to explore possible solutions quickly",
+    "No, the problem should be understood first",
+    "Yes, if stakeholders have a preferred solution",
+    "No, because design should start after development"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Understanding the problem first helps teams avoid designing the wrong solution."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M01",
+  "role": "Management",
+  "workflowThemeCode": "WF02",
+  "prompt": "Is it necessary for a designer to talk to users before building a product?",
+  "options": [
+    "No, if the visual direction is clear",
+    "Yes, to understand what users actually need",
+    "No, developers can estimate the effort",
+    "Yes, to estimate development effort"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Talking to users helps designers understand real needs before building a solution."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M02",
+  "role": "Management",
+  "workflowThemeCode": "WF09",
+  "prompt": "How does a designer measure UX success?",
+  "options": [
+    "By how easily users achieve their goals",
+    "By the number of features released",
+    "By the number of screens designed",
+    "By how quickly the product launches"
+  ],
+  "rightAnswer": "A",
+  "feedback": "UX success comes from helping users complete their goals easily and confidently."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M03",
+  "role": "Management",
+  "workflowThemeCode": "WF01",
+  "prompt": "When should UX research happen in a product project?",
+  "options": [
+    "After the first design",
+    "Just before development",
+    "Early enough to influence decisions",
+    "After the product is launched"
+  ],
+  "rightAnswer": "C",
+  "feedback": "Research creates the most value when its findings can still influence the product. Why this matters: Strong evidence for arguing that UX needs to enter the process earlier."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M04",
+  "role": "Management",
+  "workflowThemeCode": "WF05",
+  "prompt": "What can happen when digital and physical interactions are designed separately?",
+  "options": [
+    "The interface becomes more flexible",
+    "The overall experience can feel disconnected",
+    "It saves a lot of time.",
+    "The system becomes easier to learn"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Users experience the physical and digital system as one product, so both should work together."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M05",
+  "role": "Management",
+  "workflowThemeCode": "WF06",
+  "prompt": "Why can design be difficult to plan on a fixed timeline?",
+  "options": [
+    "Testing can lead to changes",
+    "Design has fewer milestones",
+    "Design requires more planning",
+    "Design tools change frequently"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Design involves learning and iteration, so new findings can change the plan."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M06",
+  "role": "Management",
+  "workflowThemeCode": "WF06",
+  "prompt": "Why can enterprise UX projects take longer than expected?",
+  "options": [
+    "Designers lack the domain knowledge",
+    "Complex workflows need more research and validation",
+    "Enterprise products need more screens",
+    "Stakeholders always change their minds"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Complex systems often require more discovery, testing, and coordination before a solution is ready."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M07",
+  "role": "Management",
+  "workflowThemeCode": "WF03",
+  "prompt": "Should design happen before the problem is fully understood?",
+  "options": [
+    "Yes, to explore possible solutions quickly",
+    "No, the problem should be understood first",
+    "Yes, if stakeholders have a preferred solution",
+    "No, because design should start after development"
+  ],
+  "rightAnswer": "B",
+  "feedback": "Understanding the problem first helps teams avoid designing the wrong solution."
+},
+  {
+  "sectionCode": "M",
+  "questionCode": "M08",
+  "role": "Management",
+  "workflowThemeCode": "WF09",
+  "prompt": "Should designers understand business goals?",
+  "options": [
+    "Yes, to connect user needs with business outcomes",
+    "No, because design should focus only on users",
+    "Yes, to make product decisions independently",
+    "No, because business goals belong to leadership"
+  ],
+  "rightAnswer": "A",
+  "feedback": "Strong design connects user value with business goals."
+}
+];
+
+const QUIZ_SIZE = 5;
+let sessionQuestions = [];
+let lastSessionKey = "";
+
+function shuffleArray(items){
+  const shuffled = [...items];
+  for(let index = shuffled.length - 1; index > 0; index -= 1){
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+}
+
+function createQuizSession(role){
+  const roleQuestions = questionBank.filter(question => question.sectionCode === role);
+
+  if(roleQuestions.length < QUIZ_SIZE){
+    throw new Error(`Not enough questions for role ${role}. Need ${QUIZ_SIZE}, found ${roleQuestions.length}.`);
+  }
+
+  let selected;
+  let sessionKey;
+
+  do{
+    selected = shuffleArray(roleQuestions).slice(0, QUIZ_SIZE);
+    sessionKey = selected.map(question => question.questionCode).sort().join("|");
+  }while(roleQuestions.length > QUIZ_SIZE && sessionKey === lastSessionKey);
+
+  lastSessionKey = sessionKey;
+  return selected;
+}
+
+/* =========================================================
+   PLATFORM POSITIONS
+   ========================================================= */
+
+const platformStops = [
+
+  {
+    side:"floor"
+  },
+
+  {
+    side:"left"
+  },
+
+  {
+    side:"right"
+  },
+
+  {
+    side:"left"
+  },
+
+  {
+    side:"right"
+  },
+
+  {
+    side:"left"
+  }
+
+];
+
+
+const lowerStepTop =
+  () => stage.clientHeight * .63;
+
+/* The platform layer begins below the HUD. Keep the existing
+   platform proportions, but account for that offset when the
+   robot lands so the red platform remains visibly underneath it. */
+const platformLayerTop =
+  () => stage.clientHeight * .135;
+
+const platformHeight =
+  () => stage.clientHeight * .0875;
+
+const landingPlatformTop =
+  () => stage.clientHeight - 8 - platformHeight();
+
+const upperStepTop =
+  () => stage.clientHeight * .19;
+
+const heroHeight =
+  () => stage.clientHeight * .27;
+
+
+const heroBySide = {
+
+  left:{
+    left:34
+  },
+
+  right:{
+    left:66
+  }
+
+};
+
+
+const floorHeroPosition = {
+  left:50
+};
+
+
+const jumpDuration = 820;
+
+
+/* =========================================================
+   GAME STATE
+   ========================================================= */
+
+let current = 0;
+
+let selectedRole = "";
+
+let visualStep = 0;
+
+let score = 0;
+
+let livesLeft = 3;
+
+let locked = false;
+
+let waveTimer = 0;
+
+let jumpFrame = 0;
+
+let platformOffset = 0;
+
+let winningFlagTimer = 0;
+
+let endAnimationTimer = 0;
+
+let gameOverByLives = false;
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const landing =
+  document.getElementById("landing");
+
+const roleDropdown =
+  document.getElementById("roleDropdown");
+
+const roleSelectTrigger =
+  document.getElementById("roleSelectTrigger");
+
+const roleSelectValue =
+  document.getElementById("roleSelectValue");
+
+const roleMenu =
+  document.getElementById("roleMenu");
+
+const roleOptions =
+  [...roleMenu.querySelectorAll(".role-option")];
+
+const startQuizBtn =
+  document.getElementById("startQuizBtn");
+
+const game =
+  document.getElementById("game");
+
+const result =
+  document.getElementById("result");
+
+const stage =
+  document.getElementById("stage");
+
+const questionLabel =
+  document.getElementById("questionLabel");
+
+const lives =
+  document.getElementById("lives");
+
+const platformLayer =
+  document.getElementById("platformLayer");
+
+const winningFlag =
+  document.getElementById("winningFlag");
+
+const bubble =
+  document.getElementById("bubble");
+
+const hero =
+  document.getElementById("hero");
+
+const spriteA =
+  document.getElementById("spriteA");
+
+const spriteB =
+  document.getElementById("spriteB");
+
+let activeSprite =
+  spriteA;
+
+const shadow =
+  document.getElementById("shadow");
+
+const prompt =
+  document.getElementById("prompt");
+
+const answers =
+  document.getElementById("answers");
+
+const nextBtn =
+  document.getElementById("nextBtn");
+
+const scoreText =
+  document.getElementById("scoreText");
+
+const resultTitle =
+  document.getElementById("resultTitle");
+
+const resultScore =
+  document.getElementById("resultScore");
+
+const resultAnimation =
+  document.getElementById("resultAnimation");
+
+const resultAnimationFrame =
+  document.getElementById("resultAnimationFrame");
+
+const restartBtn =
+  document.getElementById("restartBtn");
+
+
+/* =========================================================
+   BUILD PLATFORMS
+   ========================================================= */
+
+function buildPlatforms(){
+
+  platformStops.forEach(
+    (stop,index) => {
+
+      if(
+        stop.side === "floor"
+      ){
+        return;
+      }
+
+      const platform =
+        document.createElement(
+          "div"
+        );
+
+      platform.className =
+        `platform ${stop.side}`;
+
+      platform.dataset.index =
+        index;
+
+      platformLayer.appendChild(
+        platform
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   POSITION PLATFORM
+   ========================================================= */
+
+function positionPlatform(
+  platform,
+  side,
+  top,
+  opacity
+){
+
+  platform.className =
+    `platform ${side}`;
+
+  platform.style.top =
+    `${top}px`;
+
+  platform.style.opacity =
+    opacity;
+
+}
+
+
+/* =========================================================
+   RENDER PLATFORMS
+   ========================================================= */
+
+function renderPlatforms(step){
+
+  [
+    ...platformLayer
+      .querySelectorAll(
+        ".platform"
+      )
+  ]
+  .forEach(platform => {
+
+    const platformIndex =
+      Number(
+        platform.dataset.index
+      );
+
+
+    if(
+      platformIndex ===
+      Math.max(1,step)
+    ){
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        lowerStepTop(),
+
+        1
+      );
+
+    }
+
+    else if(
+      platformIndex ===
+      Math.max(1,step) + 1
+    ){
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        upperStepTop(),
+
+        1
+      );
+
+    }
+
+    else{
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        platformIndex < step
+          ? -56
+          : 280,
+
+        0
+      );
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   RENDER JUMPING PLATFORMS
+   ========================================================= */
+
+function renderJumpingPlatforms(
+  fromStep,
+  toStep,
+  progress
+){
+
+  const travel =
+    lowerStepTop()
+    -
+    upperStepTop();
+
+
+  [
+    ...platformLayer
+      .querySelectorAll(
+        ".platform"
+      )
+  ]
+  .forEach(platform => {
+
+    const platformIndex =
+      Number(
+        platform.dataset.index
+      );
+
+
+    if(
+      platformIndex === fromStep &&
+      fromStep > 0
+    ){
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        lowerStepTop()
+        +
+        travel * progress,
+
+        1 - progress
+      );
+
+    }
+
+    else if(
+      platformIndex === toStep
+    ){
+
+      const top =
+        fromStep === 0
+          ? lowerStepTop()
+          : upperStepTop()
+            +
+            travel * progress;
+
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        top,
+
+        1
+      );
+
+    }
+
+    else if(
+      platformIndex ===
+      toStep + 1
+    ){
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        upperStepTop(),
+
+        fromStep === 0
+          ? 1
+          : progress
+      );
+
+    }
+
+    else{
+
+      positionPlatform(
+        platform,
+
+        platformStops[
+          platformIndex
+        ].side,
+
+        platformIndex < fromStep
+          ? -56
+          : 280,
+
+        0
+      );
+
+    }
+
+  });
+
+}
+
+
+/* =========================================================
+   LIVES
+   ========================================================= */
+
+function renderLives(){
+
+  lives.innerHTML = "";
+
+  for(
+    let index = 0;
+    index < 3;
+    index += 1
+  ){
+
+    const img =
+      document.createElement(
+        "img"
+      );
+
+    img.className =
+      "life";
+
+    img.src =
+      index < livesLeft
+        ? assets.life
+        : assets.lifeLost;
+
+    img.alt =
+      index < livesLeft
+        ? "life"
+        : "lost life";
+
+    lives.appendChild(img);
+
+  }
+
+}
+
+
+/* =========================================================
+   SPEECH BUBBLE
+   ========================================================= */
+
+function setBubble(
+  text,
+  mood
+){
+
+  bubble.textContent =
+    text;
+
+  bubble.classList.add(
+    "large"
+  );
+
+  positionBubble(
+    visualStep
+  );
+
+  bubble.classList.remove(
+    "show"
+  );
+
+  window.requestAnimationFrame(
+    () =>
+      bubble.classList.add(
+        "show"
+      )
+  );
+
+}
+
+
+/* =========================================================
+   ROBOT POSITION
+   ========================================================= */
+
+function placeHero(){
+
+  const stop =
+    platformStops[
+      visualStep
+    ];
+
+  const heroPosition =
+    getHeroPosition(
+      visualStep
+    );
+
+  const faceDir =
+    visualStep > 0 &&
+    stop.side === "right"
+      ? -1
+      : 1;
+
+
+  hero.style.left =
+    heroPosition.left + "%";
+
+  hero.style.top =
+    heroPosition.top + "px";
+
+
+  spriteA.style.setProperty(
+    "--face-dir",
+    faceDir
+  );
+
+  spriteB.style.setProperty(
+    "--face-dir",
+    faceDir
+  );
+
+
+  positionBubble(
+    visualStep
+  );
+
+
+  renderPlatforms(
+    visualStep
+  );
+
+}
+
+
+/* =========================================================
+   ROBOT POSITION CALCULATION
+   ========================================================= */
+
+function getHeroPosition(step){
+
+  return {
+
+    left:
+      step === 0
+        ? floorHeroPosition.left
+        : heroBySide[
+            platformStops[
+              step
+            ].side
+          ].left,
+
+    top:
+      step === 0
+        ? Math.max(
+            stage.clientHeight * .135,
+            stage.clientHeight - heroHeight() - 8
+          )
+        : landingPlatformTop() - heroHeight()
+
+  };
+
+}
+
+
+/* =========================================================
+   BUBBLE POSITION
+   ========================================================= */
+
+function getBubblePosition(step){
+
+  const heroPosition =
+    getHeroPosition(step);
+
+  const stageWidth =
+    stage.clientWidth || 362;
+
+  const bubbleWidth =
+    stageWidth *
+    (
+      bubble.classList.contains(
+        "large"
+      )
+        ? .375
+        : .34
+    );
+
+  const heroCenter =
+    stageWidth *
+    heroPosition.left /
+    100;
+
+
+  if(step === 0){
+
+    return {
+
+      left:
+        heroCenter
+        -
+        bubbleWidth * .58,
+
+      top:
+        heroPosition.top
+        -
+        (
+          bubble.classList.contains(
+            "large"
+          )
+            ? stage.clientHeight * .31
+            : stage.clientHeight * .18
+        )
+
+    };
+
+  }
+
+
+  return {
+
+    left:
+      heroCenter
+      -
+      bubbleWidth * .5,
+
+    top:
+      heroPosition.top
+      -
+      (
+        bubble.classList.contains(
+          "large"
+        )
+          ? stage.clientHeight * .31
+          : stage.clientHeight * .18
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   POSITION BUBBLE
+   ========================================================= */
+
+function positionBubble(step){
+
+  const bubblePosition =
+    getBubblePosition(step);
+
+  bubble.style.left =
+    bubblePosition.left + "px";
+
+  bubble.style.top =
+    bubblePosition.top + "px";
+
+}
+
+
+/* =========================================================
+   WINNING FLAG
+   ========================================================= */
+
+function hideWinningFlag(){
+
+  winningFlag.classList.remove(
+    "show"
+  );
+
+  if(winningFlagTimer){
+
+    window.clearInterval(
+      winningFlagTimer
+    );
+
+  }
+
+  winningFlagTimer = 0;
+
+}
+
+
+function positionWinningFlag(){
+
+  /*
+    The final platform is platformStops[5], which is the
+    left-side platform. The flag is positioned relative to
+    that platform and its bottom is aligned with the top of
+    the red platform.
+  */
+
+  const finalPlatformWidth =
+    stage.clientWidth * .387;
+
+  const flagWidth =
+    stage.clientWidth * .095;
+
+  const imageRatio =
+    winningFlag.naturalHeight &&
+    winningFlag.naturalWidth
+      ? winningFlag.naturalHeight /
+        winningFlag.naturalWidth
+      : 299 / 242;
+
+  const flagHeight =
+    flagWidth * imageRatio;
+
+  const finalPlatformTop =
+    lowerStepTop();
+
+  winningFlag.style.left =
+    `${finalPlatformWidth * .14}px`;
+
+  winningFlag.style.top =
+    `${finalPlatformTop - flagHeight + 2}px`;
+
+}
+
+
+function showWinningFlag(){
+
+  positionWinningFlag();
+
+  winningFlag.src =
+    assets.flag[0];
+
+  winningFlag.classList.add(
+    "show"
+  );
+
+  if(winningFlagTimer){
+
+    window.clearInterval(
+      winningFlagTimer
+    );
+
+  }
+
+  let frame = 0;
+
+  winningFlagTimer =
+    window.setInterval(
+      () => {
+
+        frame =
+          (frame + 1) %
+          assets.flag.length;
+
+        winningFlag.src =
+          assets.flag[frame];
+
+      },
+      260
+    );
+
+}
+
+
+/* =========================================================
+   RENDER QUESTION
+   ========================================================= */
+
+function renderQuestion(){
+  stopEndAnimation();
+  const question = sessionQuestions[current];
+  locked = false;
+  hideWinningFlag();
+
+  questionLabel.textContent = `Question ${current + 1}`;
+  prompt.textContent = `${current + 1}. ${question.prompt}`;
+  answers.innerHTML = "";
+  nextBtn.classList.remove("show");
+  nextBtn.disabled = false;
+  nextBtn.textContent = current === QUIZ_SIZE - 1 ? "Finish quiz" : "Next question";
+
+  placeHero();
+  setBubble("Select the correct option...", "large");
+  renderLives();
+
+  // The answer letters remain fixed in the bank; only the four visual positions are randomized.
+  const displayOptions = shuffleArray(
+    question.options.map((option, index) => ({
+      option,
+      answerLetter: String.fromCharCode(65 + index)
+    }))
+  );
+
+  displayOptions.forEach(({option, answerLetter}) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "answer";
+    button.dataset.answer = answerLetter;
+    button.textContent = option;
+    button.addEventListener("click", () => chooseAnswer(answerLetter));
+    answers.appendChild(button);
+  });
+}
+
+/* =========================================================
+   ANSWER
+   ========================================================= */
+
+function chooseAnswer(answerLetter){
+  if(locked) return;
+  locked = true;
+
+  const question = sessionQuestions[current];
+  const correct = answerLetter === question.rightAnswer;
+  const buttons = [...answers.querySelectorAll(".answer")];
+
+  // Only answered questions are recorded. Every answered question gets a 1 or 0.
+  responses[current] = {
+    questionCode: question.questionCode,
+    workflowThemeCode: question.workflowThemeCode,
+    role: question.sectionCode,
+    selectedAnswer: answerLetter,
+    rightAnswer: question.rightAnswer,
+    score: correct ? 1 : 0
+  };
+
+  buttons.forEach(button => {
+    button.disabled = true;
+    if(button.dataset.answer === answerLetter){
+      button.classList.add(correct ? "correct" : "wrong");
+    }
+    if(!correct && button.dataset.answer === question.rightAnswer){
+      button.classList.add("correct");
+    }
+  });
+
+  if(correct){
+    score += 1;
+    setBubble(question.feedback, "large");
+    runJump(question.feedback);
+  }else{
+    livesLeft = Math.max(0, livesLeft - 1);
+    stopWave();
+    renderLives();
+
+    hero.classList.remove("wrong");
+    void hero.offsetWidth;
+    hero.classList.add("wrong");
+
+    setBubble(question.feedback, "large");
+
+    // HARD STOP: losing the third life ends the attempt immediately.
+    // Do NOT show Next Question and do NOT allow the current question
+    // to advance to another question.
+    if(livesLeft === 0){
+      gameOverByLives = true;
+      locked = true;
+
+      nextBtn.classList.remove("show");
+      nextBtn.disabled = true;
+
+      game.style.display = "none";
+      result.classList.add("active");
+
+      const finalScore = responses.reduce(
+        (total, response) => total + (response?.score || 0),
+        0
+      );
+
+      resultScore.textContent = `${finalScore} / ${QUIZ_SIZE}`;
+      resultTitle.textContent = "Game Over";
+      scoreText.textContent =
+        `You lost all 3 lives. Your score is ${finalScore} / ${QUIZ_SIZE}.`;
+
+      // Loss always uses the Heartbreak animation.
+      playEndAnimation(false);
+      
+      // Send responses to Excel after animation starts (1.5 second delay)
+      console.log("⏱️ Starting timer to send responses in 1.5 seconds... (from Game Over)");
+      setTimeout(() => {
+        console.log("⏰ Timer fired! Calling sendResponsesToExcel() from Game Over");
+        sendResponsesToExcel();
+      }, 1500);
+      
+      return;
+    }
+
+    nextBtn.disabled = false;
+    nextBtn.classList.add("show");
+  }
+}
+
+/* =========================================================
+   JUMP
+   ========================================================= */
+
+function runJump(message){
+
+  stopWave();
+
+
+  /*
+    Keep the feedback visible during the jump. The bubble is
+    repositioned when the robot lands on the next platform.
+  */
+  positionBubble(
+    visualStep
+  );
+
+
+  shadow.src =
+    assets.jumpShadow;
+
+
+  platformLayer.style.transition =
+    "none";
+
+
+  if(jumpFrame){
+
+    window.cancelAnimationFrame(
+      jumpFrame
+    );
+
+  }
+
+
+  const fromStep =
+    visualStep;
+
+  /*
+    The robot's physical position must follow the number of
+    correct answers, not the question number.
+
+    If a question was answered incorrectly, visualStep stays
+    where the robot last landed. When the next question is
+    answered correctly, the robot must therefore move to the
+    very next platform that it previously missed, rather than
+    skipping over it.
+
+    Example:
+      Q1 wrong  -> visualStep = 0
+      Q2 right  -> visualStep 0 -> platform 1
+      Q3 right  -> visualStep 1 -> platform 2
+
+    This keeps the visual game path synchronized with the
+    player's actual successful answers.
+  */
+  const toStep =
+    Math.min(
+      visualStep + 1,
+      platformStops.length - 1
+    );
+
+
+  const toSide =
+    platformStops[
+      toStep
+    ].side;
+
+
+  const fromPosition =
+    getHeroPosition(
+      fromStep
+    );
+
+  const toPosition =
+    getHeroPosition(
+      toStep
+    );
+
+
+  const startPlatformOffset =
+    platformOffset;
+
+
+  /* Move the platform layer so the landing platform sits
+     just above the bottom edge, with its full red face visible. */
+  const targetPlatformOffset =
+    Math.max(
+      0,
+      landingPlatformTop()
+      -
+      platformLayerTop()
+      -
+      lowerStepTop()
+    );
+
+
+  const verticalShift =
+    targetPlatformOffset
+    -
+    startPlatformOffset;
+
+
+  const jumpDirection =
+    toSide === "left"
+      ? -1
+      : 1;
+
+
+  const startTime =
+    performance.now();
+
+
+  let lastFrameIndex =
+    -1;
+
+
+  spriteA.style.setProperty(
+    "--face-dir",
+    jumpDirection
+  );
+
+  spriteB.style.setProperty(
+    "--face-dir",
+    jumpDirection
+  );
+
+
+  function animateJump(now){
+
+    const elapsed =
+      now - startTime;
+
+
+    const progress =
+      Math.min(
+        elapsed /
+        jumpDuration,
+        1
+      );
+
+
+    const eased =
+      .5
+      -
+      Math.cos(
+        progress * Math.PI
+      ) / 2;
+
+
+    const left =
+      fromPosition.left
+      +
+      (
+        toPosition.left
+        -
+        fromPosition.left
+      )
+      *
+      eased;
+
+
+    const top =
+      fromPosition.top;
+
+
+    const frameIndex =
+      Math.min(
+        assets.jump.length - 1,
+
+        Math.floor(
+          progress *
+          assets.jump.length
+        )
+      );
+
+
+    hero.style.left =
+      left + "%";
+
+
+    hero.style.top =
+      top + "px";
+
+
+    platformLayer.style.transform =
+      `translateY(${
+        startPlatformOffset
+        +
+        verticalShift * eased
+        +
+        Math.sin(
+          progress * Math.PI
+        ) * 64
+      }px)`;
+
+
+    renderJumpingPlatforms(
+      fromStep,
+      toStep,
+      eased
+    );
+
+
+    if(
+      frameIndex !==
+      lastFrameIndex
+    ){
+
+      activeSprite.src =
+        assets.jump[
+          frameIndex
+        ];
+
+      activeSprite.classList.add("is-visible");
+      (activeSprite === spriteA ? spriteB : spriteA)
+        .classList.remove("is-visible");
+
+      lastFrameIndex =
+        frameIndex;
+
+    }
+
+
+    if(
+      progress < 1
+    ){
+
+      jumpFrame =
+        window.requestAnimationFrame(
+          animateJump
+        );
+
+      return;
+    }
+
+
+    visualStep =
+      toStep;
+
+
+    platformOffset =
+      targetPlatformOffset;
+
+
+    placeHero();
+
+
+    platformLayer.style.transform =
+      `translateY(${platformOffset}px)`;
+
+
+    platformLayer.style.transition =
+      "transform 720ms cubic-bezier(.22,1,.36,1)";
+
+
+    jumpFrame = 0;
+
+
+    shadow.src =
+      assets.waveShadow;
+
+
+    startWave();
+
+
+    setBubble(
+      message
+    );
+
+    /*
+      A winning flag appears only after the fifth correct
+      answer, provided no life was lost during the run.
+    */
+    if(
+      current === sessionQuestions.length - 1 &&
+      score === sessionQuestions.length
+    ){
+
+      showWinningFlag();
+
+    }
+
+
+    nextBtn.classList.add(
+      "show"
+    );
+
+  }
+
+
+  jumpFrame =
+    window.requestAnimationFrame(
+      animateJump
+    );
+
+}
+
+
+/* =========================================================
+   START QUIZ
+   ========================================================= */
+
+function startQuiz(){
+
+  if(!selectedRole){
+    roleSelectTrigger.focus();
+    return;
+  }
+
+  const availableQuestions = questionBank.filter(question => question.sectionCode === selectedRole);
+  if(availableQuestions.length < QUIZ_SIZE){
+    setBubble("There are not enough questions for this role yet.", "large");
+    return;
+  }
+
+  /*
+    Every quiz run gets a fresh random set of five questions
+    from the selected role's question bank. The previous exact set is avoided
+    when possible so a new run feels genuinely different.
+  */
+  sessionQuestions = createQuizSession(selectedRole);
+
+
+  landing.style.display =
+    "none";
+
+
+  game.classList.remove(
+    "hidden"
+  );
+
+
+  current = 0;
+
+  visualStep = 0;
+
+  platformOffset = 0;
+
+  score = 0;
+  responses = [];
+
+  livesLeft = 3;
+
+  gameOverByLives = false;
+
+  hideWinningFlag();
+
+
+  platformLayer.style.transform =
+    "none";
+
+
+  renderQuestion();
+
+  startWave();
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+   ========================================================= */
+
+function nextQuestion(){
+  if(!locked || gameOverByLives || livesLeft <= 0) return;
+
+  current += 1;
+
+  if(current >= QUIZ_SIZE){
+    showResult();
+    return;
+  }
+
+  renderQuestion();
+  startWave();
+}
+
+function stopEndAnimation(){
+  if(endAnimationTimer){
+    window.clearInterval(endAnimationTimer);
+  }
+  endAnimationTimer = 0;
+}
+
+function playEndAnimation(won){
+  stopEndAnimation();
+
+  const frames = won ? assets.trofee : assets.heartbreak;
+  const type = won ? "trofee" : "heartbreak";
+
+  resultAnimation.classList.remove("trofee", "heartbreak");
+  resultAnimation.classList.add(type);
+
+  let frame = 0;
+  resultAnimationFrame.src = frames[frame];
+
+  // Delay animation start by 1 second, then play once; leave the final frame visible.
+  endAnimationTimer = window.setTimeout(() => {
+    endAnimationTimer = window.setInterval(() => {
+      frame += 1;
+      if(frame >= frames.length){
+        stopEndAnimation();
+        return;
+      }
+      resultAnimationFrame.src = frames[frame];
+    }, 280);
+  }, 1000);
+}
+
+/* =========================================================
+   EXCEL INTEGRATION
+   ========================================================= */
+
+const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycby7jqz9WL_zp5n-xfiNCEJ5HliASSuAmscbFx9RRmQPc7RcgfwIeNsTfTpqcfc5_snxVQ/exec";
+
+function generateSerialNumber(){
+  return `QZ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+}
+
+function formatResponsesForExcel(){
+  console.log("📦 Formatting responses for Excel...");
+  
+  const serialNumber = generateSerialNumber();
+  const timestamp = new Date().toISOString();
+  
+  // Get role name from code
+  const roleMap = {
+    "M": "Management",
+    "DS": "Design",
+    "DEV": "Development",
+    "TST": "Testing",
+    "ENG": "Engineering",
+    "STK": "Stakeholder / Sales"
+  };
+  const roleName = roleMap[selectedRole] || selectedRole;
+  
+  // Build flat object with individual columns for each question
+  const finalData = {
+    serialNumber,
+    timestamp,
+    role: roleName
+  };
+  
+  // Add each question's data as separate columns
+  responses.forEach((response, index) => {
+    const qNum = index + 1;
+    if(response){
+      finalData[`Q${qNum}_Code`] = response.questionCode || "";
+      finalData[`Q${qNum}_Score`] = response.score || 0;
+      finalData[`Q${qNum}_Workflow`] = response.workflowThemeCode || "";
+    }
+  });
+  
+  // Add total score
+  finalData.Total_Score = responses.reduce((sum, r) => sum + (r?.score || 0), 0);
+  
+  console.log("✅ Formatted data:", finalData);
+  return finalData;
+}
+
+function sendResponsesToExcel(){
+  console.log("🚀 SENDING RESPONSES TO GOOGLE SHEETS");
+  
+  if(!selectedRole){
+    console.error("❌ ERROR: No role selected!");
+    return;
+  }
+  
+  if(responses.length === 0){
+    console.error("❌ ERROR: No responses collected!");
+    return;
+  }
+  
+  const data = formatResponsesForExcel();
+  
+  console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
+  console.log("📤 Sending payload:", JSON.stringify(data, null, 2));
+  
+  // Send to Google Sheets
+  fetch(GOOGLE_SHEETS_WEBHOOK, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    console.log("✅ Response received! Status:", response.status);
+    if(!response.ok){
+      console.error("❌ HTTP Error:", response.status, response.statusText);
+      return response.text().then(text => {
+        console.error("Response body:", text);
+      });
+    }
+    console.log("✅✅✅ DATA SENT SUCCESSFULLY TO GOOGLE SHEETS!");
+    return response.json().catch(() => ({}));
+  })
+  .catch(error => {
+    console.error("❌ FETCH ERROR:", error.message);
+    console.error("Full error:", error);
+  });
+}
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+function showResult(){
+  console.log("📊 SHOW RESULT CALLED");
+  console.log("Selected Role:", selectedRole);
+  console.log("Responses collected:", responses.length);
+  
+  stopWave();
+  gameOverByLives = false;
+
+  game.style.display = "none";
+  result.classList.add("active");
+
+  const answeredCount = responses.filter(Boolean).length;
+  const finalScore = responses.reduce((total, response) => total + (response?.score || 0), 0);
+  const won = finalScore === QUIZ_SIZE;
+
+  resultScore.textContent = `${finalScore} / ${QUIZ_SIZE}`;
+  resultTitle.textContent = won ? "You Win!" : "Quiz Complete";
+  scoreText.textContent = won
+    ? "Excellent! You got all 5 questions correct."
+    : `You completed all ${answeredCount} questions with ${finalScore} correct.`;
+
+  playEndAnimation(won);
+  
+  // Send responses to Excel after animation starts (1.5 second delay)
+  console.log("⏱️ Starting timer to send responses in 1.5 seconds...");
+  setTimeout(() => {
+    console.log("⏰ Timer fired! Calling sendResponsesToExcel()");
+    sendResponsesToExcel();
+  }, 1500);
+}
+
+/* =========================================================
+   WAVE
+   ========================================================= */
+
+function startWave(){
+
+  stopWave();
+
+  let frame = 0;
+  let direction = 1;
+  let completedCycles = 0;
+
+  /*
+    Four supplied wave poses are played as a gentle ping-pong loop:
+
+      Wave 1 → Wave 2 → Wave 3 → Wave 4 → Wave 3 → Wave 2 → ...
+
+    Two identical sprite layers crossfade between poses. This makes
+    the hand movement feel much less abrupt while keeping the robot's
+    feet and body anchored to the same position.
+  */
+  const frameDuration = 145;
+  const crossfadeDuration = 125;
+
+  spriteA.style.transition =
+    `opacity ${crossfadeDuration}ms linear`;
+
+  spriteB.style.transition =
+    `opacity ${crossfadeDuration}ms linear`;
+
+  activeSprite = spriteA;
+
+  spriteA.src =
+    assets.wave[0];
+
+  spriteB.src =
+    assets.wave[0];
+
+  spriteA.classList.add("is-visible");
+  spriteB.classList.remove("is-visible");
+
+  let lastFrameTime =
+    performance.now();
+
+  function showFrame(nextFrame){
+
+    const nextSprite =
+      activeSprite === spriteA
+        ? spriteB
+        : spriteA;
+
+    nextSprite.src =
+      assets.wave[nextFrame];
+
+    /*
+      The four wave images are preloaded at startup. The small
+      requestAnimationFrame delay lets the browser paint the new
+      image before the opacity transition begins.
+    */
+    window.requestAnimationFrame(() => {
+
+      nextSprite.classList.add(
+        "is-visible"
+      );
+
+      activeSprite.classList.remove(
+        "is-visible"
+      );
+
+      activeSprite =
+        nextSprite;
+
+    });
+  }
+
+  function animateWave(now){
+
+    if(!waveTimer){
+      return;
+    }
+
+    const elapsed =
+      now - lastFrameTime;
+
+    if(elapsed >= frameDuration){
+
+      const steps =
+        Math.min(
+          2,
+          Math.floor(
+            elapsed / frameDuration
+          )
+        );
+
+      for(
+        let step = 0;
+        step < steps;
+        step += 1
+      ){
+
+        frame += direction;
+
+        if(
+          frame >=
+          assets.wave.length - 1
+        ){
+
+          frame =
+            assets.wave.length - 1;
+
+          direction = -1;
+
+        }else if(frame <= 0){
+
+          frame = 0;
+
+          direction = 1;
+
+          completedCycles += 1;
+
+        }
+
+        showFrame(frame);
+
+        if(completedCycles >= 2){
+
+          stopWave();
+
+          return;
+
+        }
+
+      }
+
+      lastFrameTime +=
+        steps * frameDuration;
+    }
+
+    waveTimer =
+      window.requestAnimationFrame(
+        animateWave
+      );
+  }
+
+  waveTimer =
+    window.requestAnimationFrame(
+      animateWave
+    );
+}
+
+/* =========================================================
+   STOP WAVE
+   ========================================================= */
+
+function stopWave(){
+
+  if(waveTimer){
+
+    window.cancelAnimationFrame(
+      waveTimer
+    );
+
+  }
+
+  waveTimer = 0;
+
+}
+
+
+/* =========================================================
+   LANDING EVENTS
+   ========================================================= */
+
+function enableRoleDropdown(){
+  roleSelectTrigger.disabled = false;
+  roleSelectTrigger.removeAttribute("disabled");
+  roleSelectTrigger.setAttribute("aria-disabled", "false");
+}
+
+// Only the Start Quiz button is disabled until a role is selected.
+// The role dropdown itself must always remain interactive.
+startQuizBtn.disabled = true;
+startQuizBtn.setAttribute("aria-disabled", "true");
+enableRoleDropdown();
+
+function closeRoleDropdown(){
+  roleDropdown.classList.remove("open");
+  roleSelectTrigger.setAttribute("aria-expanded", "false");
+}
+
+function openRoleDropdown(){
+  roleDropdown.classList.add("open");
+  roleSelectTrigger.setAttribute("aria-expanded", "true");
+}
+
+roleSelectTrigger.addEventListener("click", event => {
+  event.stopPropagation();
+  roleDropdown.classList.contains("open") ? closeRoleDropdown() : openRoleDropdown();
+});
+
+roleOptions.forEach(option => {
+  option.addEventListener("click", () => {
+    selectedRole = option.dataset.value;
+    roleSelectValue.textContent = option.textContent.trim();
+    roleSelectTrigger.classList.remove("placeholder");
+    roleOptions.forEach(item => {
+      const selected = item === option;
+      item.classList.toggle("selected", selected);
+      item.setAttribute("aria-selected", String(selected));
+    });
+    startQuizBtn.disabled = false;
+    startQuizBtn.setAttribute("aria-disabled", "false");
+    closeRoleDropdown();
+  });
+});
+
+document.addEventListener("click", event => {
+  if(!roleDropdown.contains(event.target)) closeRoleDropdown();
+});
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape") closeRoleDropdown();
+});
+
+startQuizBtn.addEventListener("click", startQuiz);
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+nextBtn.addEventListener(
+  "click",
+  nextQuestion
+);
+
+
+/* =========================================================
+   RESTART
+   ========================================================= */
+
+restartBtn.addEventListener(
+  "click",
+  () => {
+
+    // Play Again always returns to the landing page.
+    stopWave();
+    hideWinningFlag();
+    stopEndAnimation();
+    resultAnimationFrame.src = "";
+
+    current = 0;
+    visualStep = 0;
+    platformOffset = 0;
+    score = 0;
+    responses = [];
+    livesLeft = 3;
+    gameOverByLives = false;
+    selectedRole = "";
+    locked = false;
+
+    result.classList.remove(
+      "active"
+    );
+
+    game.style.display =
+      "none";
+
+    landing.style.display =
+      "block";
+
+    roleSelectValue.textContent =
+      "Choose your role";
+
+    roleSelectTrigger.classList.add(
+      "placeholder"
+    );
+
+    roleOptions.forEach(option => {
+      option.classList.remove("selected");
+      option.setAttribute("aria-selected", "false");
+    });
+
+    closeRoleDropdown();
+
+    startQuizBtn.disabled = true;
+
+    nextBtn.disabled = false;
+
+    startQuizBtn.setAttribute(
+      "aria-disabled",
+      "true"
+    );
+
+    // Keep the role dropdown enabled after restarting.
+    enableRoleDropdown();
+
+    platformLayer.style.transform =
+      "none";
+
+  }
+);
+
+
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if(
+      winningFlag.classList.contains(
+        "show"
+      )
+    ){
+
+      positionWinningFlag();
+
+    }
+
+  }
+);
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+buildPlatforms();
+
+</script>
+
+</body>
+</html>
