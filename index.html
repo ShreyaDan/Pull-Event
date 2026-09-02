@@ -2706,6 +2706,29 @@ let gameOverByLives = false;
 
 let responsesSubmitted = false;
 
+/* =========================================================
+   QUIZ CONFIGURATION
+   ========================================================= */
+
+const QUIZ_SIZE = 5;
+let sessionQuestions = [];
+let responses = [];
+
+/*
+  Shuffle a copy of an array using Fisher-Yates.
+  The original question bank is never modified.
+*/
+function shuffleArray(array){
+  const copy = [...array];
+
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+
+  return copy;
+}
+
 
 /* =========================================================
    DOM
@@ -3864,7 +3887,11 @@ function startQuiz(){
     from the selected role's question bank. The previous exact set is avoided
     when possible so a new run feels genuinely different.
   */
-  sessionQuestions = createQuizSession(selectedRole);
+  /*
+    Pick exactly five random questions from the selected role.
+    The supplied questionBank is the only source of questions.
+  */
+  sessionQuestions = shuffleArray(availableQuestions).slice(0, QUIZ_SIZE);
 
 
   landing.style.display =
