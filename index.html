@@ -4101,58 +4101,58 @@ function sendResponsesToExcel(){
     return;
   }
 
-  if(responses.length === 0){
-    console.error("❌ ERROR: No responses collected!");
+  if(!responses || responses.length !== QUIZ_SIZE){
+    console.error("❌ ERROR: Quiz is not complete. Responses:", responses);
     return;
   }
 
   const data = formatResponsesForExcel();
-  const jsonData = JSON.stringify(data);
+  const payload = JSON.stringify(data);
 
   console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
-  console.log("📤 Sending payload:", jsonData);
+  console.log("📤 Payload:", payload);
 
   /*
-    Google Apps Script reads e.parameter.data.
-    A normal HTML form POST sends exactly that field and avoids
-    cross-origin fetch/CORS preflight issues.
+    IMPORTANT:
+    The Apps Script doPost(e) reads e.postData.contents and parses it as JSON.
+    sendBeacon() sends a real POST request with a simple text/plain body and
+    does not require a CORS preflight. This is more reliable from GitHub Pages.
   */
-
-  const iframeName = "googleSheetsSubmitFrame_" + Date.now();
-
-  const iframe = document.createElement("iframe");
-  iframe.name = iframeName;
-  iframe.style.display = "none";
-  document.body.appendChild(iframe);
-
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = GOOGLE_SHEETS_WEBHOOK;
-  form.target = iframeName;
-  form.style.display = "none";
-
-  const input = document.createElement("input");
-  input.type = "hidden";
-  input.name = "data";
-  input.value = jsonData;
-
-  form.appendChild(input);
-  document.body.appendChild(form);
-
   try{
-    responsesSubmitted = true;
-    form.submit();
-    console.log("✅ Submission sent to Google Apps Script.");
-  }catch(error){
-    responsesSubmitted = false;
-    console.error("❌ GOOGLE SHEETS SUBMISSION FAILED:", error);
-  }
+    const blob = new Blob([payload], {
+      type: "text/plain;charset=utf-8"
+    });
 
-  setTimeout(() => {
-    form.remove();
-    iframe.remove();
-  }, 10000);
+    const sent = navigator.sendBeacon(GOOGLE_SHEETS_WEBHOOK, blob);
+
+    if(sent){
+      responsesSubmitted = true;
+      console.log("✅ Quiz data handed to Google Sheets successfully.");
+    }else{
+      console.warn("⚠️ sendBeacon was not accepted. Trying fetch fallback...");
+
+      fetch(GOOGLE_SHEETS_WEBHOOK, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: payload,
+        keepalive: true
+      })
+      .then(() => {
+        responsesSubmitted = true;
+        console.log("✅ Fetch fallback sent quiz data.");
+      })
+      .catch(error => {
+        console.error("❌ Google Sheets submission failed:", error);
+      });
+    }
+  }catch(error){
+    console.error("❌ Google Sheets submission failed:", error);
+  }
 }
+
 
 /* =========================================================
    RESULT
@@ -4180,13 +4180,9 @@ function showResult(){
     : `You completed all ${answeredCount} questions with ${finalScore} correct.`;
 
   playEndAnimation(won);
-  
-  // Send responses to Excel after animation starts (1.5 second delay)
-  console.log("⏱️ Starting timer to send responses in 1.5 seconds...");
-  setTimeout(() => {
-    console.log("⏰ Timer fired! Calling sendResponsesToExcel()");
-    sendResponsesToExcel();
-  }, 1500);
+
+  // Submit the completed quiz immediately.
+  sendResponsesToExcel();
 }
 
 /* =========================================================
