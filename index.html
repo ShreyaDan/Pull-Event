@@ -2706,29 +2706,6 @@ let gameOverByLives = false;
 
 let responsesSubmitted = false;
 
-/* =========================================================
-   QUIZ CONFIGURATION
-   ========================================================= */
-
-const QUIZ_SIZE = 5;
-let sessionQuestions = [];
-let responses = [];
-
-/*
-  Shuffle a copy of an array using Fisher-Yates.
-  The original question bank is never modified.
-*/
-function shuffleArray(array){
-  const copy = [...array];
-
-  for(let i = copy.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-
-  return copy;
-}
-
 
 /* =========================================================
    DOM
@@ -3869,6 +3846,19 @@ function runJump(message){
    START QUIZ
    ========================================================= */
 
+const QUIZ_SIZE = 5;
+let sessionQuestions = [];
+let responses = [];
+
+function shuffleArray(array){
+  const copy = [...array];
+  for(let i = copy.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
 function startQuiz(){
 
   if(!selectedRole){
@@ -3887,11 +3877,9 @@ function startQuiz(){
     from the selected role's question bank. The previous exact set is avoided
     when possible so a new run feels genuinely different.
   */
-  /*
-    Pick exactly five random questions from the selected role.
-    The supplied questionBank is the only source of questions.
-  */
-  sessionQuestions = shuffleArray(availableQuestions).slice(0, QUIZ_SIZE);
+  // Use ONLY the supplied question bank.
+  // Filter by role, shuffle, then take exactly 5.
+  sessionQuestions = shuffleArray(availableQuestions).slice(0, 5);
 
 
   landing.style.display =
@@ -3986,7 +3974,7 @@ function playEndAnimation(won){
    EXCEL INTEGRATION
    ========================================================= */
 
-const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzSjM8PpEMlAGMHoVm5FrsprkhSqwzTU0BsG7JQjT1ciyKytZ-HuEvh5q0XjpmTFqPRcA/exec";
+const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbxh0v5SGYv56DZu3h1C8RInGkftBVa0EHzxU4h-jUaS5UAkaC9ZbC_A6kKIU6spPzGq1A/exec";
 
 function generateSerialNumber(){
   return `QZ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
@@ -4016,15 +4004,15 @@ function formatResponsesForExcel(){
     role: roleName
   };
   
-  // Add each question's data as separate columns
-  responses.forEach((response, index) => {
+  // Always create Q1..Q5 so the Google Sheet row has a stable shape.
+  for(let index = 0; index < QUIZ_SIZE; index++){
+    const response = responses[index];
     const qNum = index + 1;
-    if(response){
-      finalData[`Q${qNum}_Code`] = response.questionCode || "";
-      finalData[`Q${qNum}_Score`] = response.score || 0;
-      finalData[`Q${qNum}_Workflow`] = response.workflowThemeCode || "";
-    }
-  });
+
+    finalData[`Q${qNum}_Code`] = response?.questionCode || "";
+    finalData[`Q${qNum}_Score`] = response ? (response.score || 0) : "";
+    finalData[`Q${qNum}_Workflow`] = response?.workflowThemeCode || "";
+  }
   
   // Add total score
   finalData.Total_Score = responses.reduce((sum, r) => sum + (r?.score || 0), 0);
@@ -4046,8 +4034,13 @@ function sendResponsesToExcel(){
     return;
   }
 
-  if(!responses || responses.length !== QUIZ_SIZE){
-    console.error("❌ ERROR: Quiz is not complete. Responses:", responses);
+  /*
+    A quiz can legitimately end early when all 3 lives are lost.
+    In that case, submit the answers that were actually attempted.
+    The Apps Script writes blank values for unanswered Q4/Q5 fields.
+  */
+  if(!responses || responses.length < 1 || responses.length > QUIZ_SIZE){
+    console.error("❌ ERROR: Invalid response count:", responses);
     return;
   }
 
