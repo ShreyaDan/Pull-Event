@@ -1945,9 +1945,13 @@ Object
    QUESTIONS
    ========================================================= */
 
+// Question content is embedded here so the quiz also works when index.html is opened
+// or previewed without a separate JavaScript file. This array remains the single source of truth.
+// =========================================================
 // QUESTION BANK — SINGLE SOURCE OF TRUTH
-// This array is generated directly from the supplied question sheet.
-// Do not add, remove, rename, or alter question content outside this array.
+// Generated directly from the supplied question-bank sheet.
+// Do not add or maintain a second question bank elsewhere.
+// =========================================================
 const questionBank = [
   {
     "sectionCode": "DEV",
@@ -2798,6 +2802,12 @@ const restartBtn =
 /* =========================================================
    BUILD PLATFORMS
    ========================================================= */
+// Integrity guard: every quiz question must come from this embedded bank.
+const QUESTION_BANK_CODES = new Set(questionBank.map(q => q.questionCode));
+if (QUESTION_BANK_CODES.size !== questionBank.length) {
+  throw new Error("Duplicate question code detected in the question bank.");
+}
+
 
 function buildPlatforms(){
 
