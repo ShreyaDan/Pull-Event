@@ -2792,6 +2792,7 @@ let endAnimationTimer = 0;
 
 let gameOverByLives = false;
 
+let responses = [];
 let responsesSubmitted = false;
 
 
@@ -4041,7 +4042,7 @@ function playEndAnimation(won){
    EXCEL INTEGRATION
    ========================================================= */
 
-const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzuUo31GTe_Ks4WzQTlTa5Pdaz_3mLOtC0jcvnEArbXu-a94gzsDlu-mf2iDg6QZnHoXg/exec";
+const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbxh0v5SGYv56DZu3h1C8RInGkftBVa0EHzxU4h-jUaS5UAkaC9ZbC_A6kKIU6spPzGq1A/exec";
 
 function generateSerialNumber(){
   return `QZ-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`.toUpperCase();
