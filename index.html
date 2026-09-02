@@ -4044,112 +4044,111 @@ function playEndAnimation(won){
 const GOOGLE_SHEETS_WEBHOOK = "https://script.google.com/macros/s/AKfycbzSjM8PpEMlAGMHoVm5FrsprkhSqwzTU0BsG7JQjT1ciyKytZ-HuEvh5q0XjpmTFqPRcA/exec";
 
 function generateSerialNumber(){
-  return `QZ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.toUpperCase();
+  return `QZ-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`.toUpperCase();
 }
 
 function formatResponsesForExcel(){
-  console.log("📦 Formatting responses for Excel...");
-  
   const serialNumber = generateSerialNumber();
   const timestamp = new Date().toISOString();
-  
-  // Get role name from code
+
   const roleMap = {
-    "M": "Management",
-    "DS": "Design",
-    "DEV": "Development",
-    "TST": "Testing",
-    "ENG": "Engineering",
-    "STK": "Stakeholder / Sales"
+    M: "Management",
+    DS: "Design",
+    DEV: "Development",
+    TST: "Testing",
+    ENG: "Engineering",
+    STK: "Stakeholder / Sales"
   };
-  const roleName = roleMap[selectedRole] || selectedRole;
-  
-  // Build flat object with individual columns for each question
-  const finalData = {
+
+  const data = {
     serialNumber,
     timestamp,
-    role: roleName
+    role: roleMap[selectedRole] || selectedRole || ""
   };
-  
-  // Add each question's data as separate columns
-  responses.forEach((response, index) => {
-    const qNum = index + 1;
-    if(response){
-      finalData[`Q${qNum}_Code`] = response.questionCode || "";
-      finalData[`Q${qNum}_Score`] = response.score || 0;
-      finalData[`Q${qNum}_Workflow`] = response.workflowThemeCode || "";
-    }
-  });
-  
-  // Add total score
-  finalData.Total_Score = responses.reduce((sum, r) => sum + (r?.score || 0), 0);
-  
-  console.log("✅ Formatted data:", finalData);
-  return finalData;
+
+  // Always create all five question columns.
+  // Unanswered questions remain blank, which is important when
+  // the player loses all three lives before reaching Question 5.
+  for(let i = 0; i < QUIZ_SIZE; i += 1){
+    const response = responses[i];
+    const qNum = i + 1;
+
+    data[`Q${qNum}_Code`] = response?.questionCode || "";
+    data[`Q${qNum}_Score`] = response ? Number(response.score) : "";
+    data[`Q${qNum}_Workflow`] = response?.workflowThemeCode || "";
+  }
+
+  return data;
 }
 
 function sendResponsesToExcel(){
-  console.log("🚀 SENDING RESPONSES TO GOOGLE SHEETS");
-
   if(responsesSubmitted){
-    console.log("ℹ️ Responses already submitted. Skipping duplicate submission.");
+    console.log("Google Sheets: already submitted.");
     return;
   }
 
   if(!selectedRole){
-    console.error("❌ ERROR: No role selected!");
+    console.error("Google Sheets: no role selected.");
     return;
   }
 
-  if(!responses || responses.length !== QUIZ_SIZE){
-    console.error("❌ ERROR: Quiz is not complete. Responses:", responses);
+  // Allow both a completed quiz and a game-over quiz.
+  // At least one answer must exist before submitting.
+  const answeredCount = responses.filter(Boolean).length;
+  if(answeredCount === 0){
+    console.error("Google Sheets: no answers to submit.");
     return;
   }
 
   const data = formatResponsesForExcel();
   const payload = JSON.stringify(data);
 
-  console.log("📡 Google Sheets Webhook URL:", GOOGLE_SHEETS_WEBHOOK);
-  console.log("📤 Payload:", payload);
+  console.log("Google Sheets: submitting", data);
 
   /*
     IMPORTANT:
-    The Apps Script doPost(e) reads e.postData.contents and parses it as JSON.
-    sendBeacon() sends a real POST request with a simple text/plain body and
-    does not require a CORS preflight. This is more reliable from GitHub Pages.
+    Do NOT use fetch() or sendBeacon() here.
+
+    GitHub Pages -> Google Apps Script is cross-origin. A normal HTML
+    form POST avoids the browser CORS problem completely.
   */
   try{
-    const blob = new Blob([payload], {
-      type: "text/plain;charset=utf-8"
-    });
+    let iframe = document.getElementById("googleSheetsSubmitFrame");
 
-    const sent = navigator.sendBeacon(GOOGLE_SHEETS_WEBHOOK, blob);
-
-    if(sent){
-      responsesSubmitted = true;
-      console.log("✅ Quiz data handed to Google Sheets successfully.");
-    }else{
-      console.warn("⚠️ sendBeacon was not accepted. Trying fetch fallback...");
-
-      fetch(GOOGLE_SHEETS_WEBHOOK, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: payload,
-        keepalive: true
-      })
-      .then(() => {
-        responsesSubmitted = true;
-        console.log("✅ Fetch fallback sent quiz data.");
-      })
-      .catch(error => {
-        console.error("❌ Google Sheets submission failed:", error);
-      });
+    if(!iframe){
+      iframe = document.createElement("iframe");
+      iframe.id = "googleSheetsSubmitFrame";
+      iframe.name = "googleSheetsSubmitFrame";
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
     }
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = GOOGLE_SHEETS_WEBHOOK;
+    form.target = "googleSheetsSubmitFrame";
+    form.style.display = "none";
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "data";
+    input.value = payload;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    form.submit();
+
+    // The browser has handed the POST to Google Apps Script.
+    responsesSubmitted = true;
+
+    window.setTimeout(() => {
+      form.remove();
+    }, 3000);
+
+    console.log("Google Sheets: POST sent successfully.");
   }catch(error){
-    console.error("❌ Google Sheets submission failed:", error);
+    console.error("Google Sheets submission failed:", error);
   }
 }
 
