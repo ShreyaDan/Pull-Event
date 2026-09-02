@@ -3864,17 +3864,15 @@ function startQuiz(){
     from the selected role's question bank. The previous exact set is avoided
     when possible so a new run feels genuinely different.
   */
-  // Pick exactly 5 random questions from the selected role.
-  const shuffledQuestions = [...availableQuestions];
+  // Select exactly 5 random questions from the already role-filtered bank.
+  const shuffled = [...availableQuestions];
 
-  for(let i = shuffledQuestions.length - 1; i > 0; i--){
+  for(let i = shuffled.length - 1; i > 0; i--){
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledQuestions[i], shuffledQuestions[j]] =
-      [shuffledQuestions[j], shuffledQuestions[i]];
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
 
-  sessionQuestions =
-    shuffledQuestions.slice(0, QUIZ_SIZE);
+  sessionQuestions = shuffled.slice(0, QUIZ_SIZE);
 
 
   landing.style.display =
@@ -4042,98 +4040,42 @@ function sendResponsesToExcel(){
 
   /*
     IMPORTANT:
-    Do NOT use fetch() or sendBeacon() here.
-
-    Google Apps Script Web Apps can redirect POST requests. From GitHub
-    Pages, that can make a fetch/sendBeacon request appear successful in
-    the browser while Apps Script never receives e.parameter.data.
-
-    A normal HTML form POST is used instead. The browser follows the
-    Apps Script redirect correctly, and Apps Script receives:
-        e.parameter.data
+    The Apps Script doPost(e) reads e.postData.contents and parses it as JSON.
+    sendBeacon() sends a real POST request with a simple text/plain body and
+    does not require a CORS preflight. This is more reliable from GitHub Pages.
   */
   try{
+    const blob = new Blob([payload], {
+      type: "text/plain;charset=utf-8"
+    });
 
-    let submitFrame =
-      document.getElementById("googleSheetsSubmitFrame");
+    const sent = navigator.sendBeacon(GOOGLE_SHEETS_WEBHOOK, blob);
 
-    if(!submitFrame){
-      submitFrame =
-        document.createElement("iframe");
+    if(sent){
+      responsesSubmitted = true;
+      console.log("✅ Quiz data handed to Google Sheets successfully.");
+    }else{
+      console.warn("⚠️ sendBeacon was not accepted. Trying fetch fallback...");
 
-      submitFrame.id =
-        "googleSheetsSubmitFrame";
-
-      submitFrame.name =
-        "googleSheetsSubmitFrame";
-
-      submitFrame.style.display =
-        "none";
-
-      document.body.appendChild(
-        submitFrame
-      );
+      fetch(GOOGLE_SHEETS_WEBHOOK, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: payload,
+        keepalive: true
+      })
+      .then(() => {
+        responsesSubmitted = true;
+        console.log("✅ Fetch fallback sent quiz data.");
+      })
+      .catch(error => {
+        console.error("❌ Google Sheets submission failed:", error);
+      });
     }
-
-    const form =
-      document.createElement("form");
-
-    form.method =
-      "POST";
-
-    form.action =
-      GOOGLE_SHEETS_WEBHOOK;
-
-    form.target =
-      "googleSheetsSubmitFrame";
-
-    form.style.display =
-      "none";
-
-    const input =
-      document.createElement("input");
-
-    input.type =
-      "hidden";
-
-    input.name =
-      "data";
-
-    input.value =
-      payload;
-
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-
-    form.submit();
-
-    /*
-      form.submit() means the browser has handed the request to the
-      Apps Script Web App. We cannot read the cross-origin response,
-      but Apps Script will process doPost() and append the row.
-    */
-    responsesSubmitted = true;
-
-    console.log(
-      "✅ Quiz data POST submitted to Google Sheets."
-    );
-
-    /*
-      Remove the temporary form after submission.
-      Keep the iframe because the form targets it.
-    */
-    setTimeout(() => {
-      form.remove();
-    }, 2000);
-
   }catch(error){
-
-    console.error(
-      "❌ Google Sheets submission failed:",
-      error
-    );
-
+    console.error("❌ Google Sheets submission failed:", error);
   }
 }
 
